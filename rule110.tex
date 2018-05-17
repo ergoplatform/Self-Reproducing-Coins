@@ -1,34 +1,111 @@
-\documentclass[preprint]{revtex4-1}
-\usepackage{tikz}
-\usepackage{pgfplots}
-\usepackage{amsmath}
+\documentclass[runningheads]{llncs}
 \usepackage{graphicx}
-\usepackage{standalone}
-\pgfplotsset{compat=newest, table/search path=figures}
+\usepackage{color}
 \graphicspath{{./figures/}}
+\bibliographystyle{splncs04}
+
+\newcommand{\knote}[1]{\textcolor{green}{Alex notes: {#1}}}
+\newcommand{\dnote}[1]{\textcolor{red}{Dima notes: {#1}}}
+\newcommand{\vk}[1]{\textcolor{blue}{V: {#1}}}
 
 \begin{document}
-    \title{Self-replicating UTXOs as universal Turing Machine}
+    \title{Self--replicating UTXOs as universal Turing Machine}
 
     \author{Anonymous authors}
+    \institute{Anonymous organizations
+    \email{anon@anon.an}}
 
     \date{\today}
-
-    \begin{abstract}
-        %        Обычно Тьюринг-полнота языков смаркт контрактов блокчейне систем связывается с многообразмем возможностей языка, в частности с наличием циклов.
-        %        Мы показываем, что даже если в языке явным образом отсутствуют циклы, возможно добиться Тьюринг полноты, если разворачивать рекурсивные вызовы не внутри одной транзакции, а между ними
-        % ??? у системы есть возможность задать зависимость между выходным и входным состояниями транзакции.
-    \end{abstract}
-
     \maketitle
 
-    \section{Introduction}
+    \begin{abstract}
+        %        Обычно Тьюринг-полнота языков смаркт контрактов блокчейне
+        % систем связывается с многообразмем возможностей языка, в
+        % частности с наличием циклов.
+        %        Мы показываем, что даже если в языке явным образом отсутствуют
+        % циклы, возможно добиться Тьюринг полноты, если разворачивать
+        % рекурсивные вызовы не внутри одной транзакции, а между ними
+        %        ??? у системы есть возможность задать зависимость между
+        % выходным и входным состояниями транзакции.
+        Turing completeness of the smart contract languages in the blockchain
+        systems is often associated with the variety of the language features
+        (such as loops) within a context of a single transaction. We show that
+        even if the language itself lacks explicit recursion or loops, Turing
+        completeness can be achieved through unwinding the recursive calls between
+        multiple transactions and blocks instead of using a single one. We prove
+        it by construction of the simple universal Turing machine using
+        minimalistic scripting language in the unspent transaction output (UTXO)
+        model, which admits the relations between input and output transaction
+        states.
+        \keywords{smart contracts, Turing completeness, blockchain, cellular
+        automata} 
+    \end{abstract}
 
+
+    \section{Introduction}
     %    История о блокчейне - Сатоши и т.д. Биткоин скрипт
     %    Биткоин скрипт начали развивать, утверждая что ему не хватает оператора ГОТО для Тьюринг полноты, обзор дискуссий по Тьюринг-полноте смарт контрактов (возможно тут тезис Черча-Тьюринга). Пачка статей, которые говорят про полноту, но никто не доказывал. 
     %    История о Тьюринг полноте вообще - несколько неформальных определений, тезис Черча-Тьюринга, и то как доказывается тьюринг полнота. Простейший пример - правило 110.
     %    Наш вклад - доказательство тьюринг полноты в UTXO блокчейне без оператора ГОТО через реализацию правила 110.
     %    Структура статьи
+    Blockchain technology has become widely adopted after the introduction of
+    Bitcoin by S.~Nakamoto~\cite{nakamoto2008bitcoin}. This peer--to--peer
+    electronic cash ledger drew the enormous attention from the public, which
+    resulted in rapid development of the technology, and appearance of hundreds
+    of alternative cryptocurrency projects. It also turned out that the
+    blockchain applications expand quite far beyond the simple ledger niche. The
+    rules of transaction validation can incorporate complicated logic, which is
+    the essence of so--called smart contracts. In the case of Bitcoin this logic
+    is implemented in the special purpose Script language, which is believed not
+    to be Turing complete. This belief stimulated development of another smart
+    contract platforms with the emphasis on the language
+    universality~\cite{buterin2014next}. However, the main obstacles to the
+    formal Turing completeness in the bolckchain, namely potentially infinite
+    execution time, and potentially infinite storage memory, still persist.
+
+    Turing complete programming language is the language admitting description
+    of the universal Turing machine. The universal Turing machine is the Turing
+    machine which can simulate any other Turing machine; its existence is one of
+    the main results of the Turing theory~\cite{turing1937computable}. The study
+    of Turing machines is strongly motivated by the Church--Turing thesis, which
+    states that Turing machines are capable of universal computation. This
+    thesis is often viewed at as a definition of computation and
+    computability~\cite{turing1939systems} \vk{find out overhead for simulating
+    quantum computer to see whether it is obsolete}. The set of known
+    computation devices and models was rapidly growing during the twentieth
+    century, and the methods of their analysis were improved as well. The
+    usual way of proving the Turing completeness of a system of rules, device or
+    the language is using it to emulate the system that is already proven to be
+    Turing complete. The most important example for our work is one--dimensional
+    cellular automaton called Rule 110. It was conjectured to be Turing complete
+    by S.~Wolfram~\cite{wolfram1986theory}. The conjecture was proven by
+    M.~Cook~\cite{cook2004universality}, who was able to simulate the cyclic tag
+    system.  The cyclic tag system can emulate the tag systems, which were
+    invented by E.~L.~Post, and are shown to be capable of emulating universal
+    Turing machines~\cite{post1943formal}.
+
+    The utter internal simplicity of Rule 110 makes it an appealing system for
+    the proofs of Turing completeness. In the present work we prove Turing
+    completeness of the whole class of the smart contract languages by explicit
+    construction of the Rule 110. We do not require neither loops, nor jump
+    operator, nor recursive calls inside the transaction. Instead, we treat the
+    computation as if it is occurring between the transactions (or, maybe
+    blocks). In this context transaction chaining and replication furnishes us
+    with potentially infinite loops and recursion, and the union of internal
+    transaction registers yields analog of potentially infinite tape. The
+    underlying idea of complexity growth is similar to one expressed
+    in~\cite{von1951general}.
+
+    The paper is structured as follows: in section 2 we first describe the naive
+    implementation of Rule 110 using Ergo scripting language\vk{or pseudocode?}.
+    Then we discuss the pitfalls arising from compliance with the blockchain
+    properties, and show the way to overcome them without language modification.
+    Section 3 contains the discussion of the implementation, language
+    requirements, and usability of the method for the real--world blockchain
+    applications.  Appendix 1 contains the code written in Ergo scripting
+    language.  Appendix 2 sketches the \vk{speculative} discussion on the nature
+    of computation in the framework of blockchain scripting and validation
+    rules.
 
     \section{Rule 110 implementation}
 
@@ -46,6 +123,7 @@
     %    Показать что это не экзотика, а достежимо в других языках, например язык Waves и Ethereum (+ посмотреть, что еще есть).
     %    Практические выводы: 1) позволяет ответить на вопрос, какой класс задач возможно реализовать в данном языке смарт контрактов. 2) Открывает возможность писать тяжелые смарт контраты, требуемые вычисления которых превышают лимит вычислений на блок, 3) ???
     %    Где же происходят вычисления? ибо мы не задаем алгоритм, а задаем правила верификации. Т.к. в заголовке мы обозначили другой результат, тут обозначить тему и вынести в аппендикс 2
+    \bibliography{sources}
 
     \section{Appendix 1}
 
@@ -55,5 +133,4 @@
 
     %    Где же происходят вычисления? ибо мы не задаем алгоритм, а задаем правила верификации. Можно сравнение, что в обычном компьютере движущая сила это электричество.. Оффчейн вычисления - требуем найти корни многочлена, или дискретный логарифм.. Посмотреть на декларативные языки программирования, может какие-нидь клеточные автоматы в экселе. Pay-for-proof contracts из биткоина.
 
-    \bibliography{sources}
 \end{document}

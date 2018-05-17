@@ -1,5 +1,6 @@
 ##PDF 
-sse.pdf
+rule110.pdf
+rule110Notes.bib
 
 *.ipynb_checkpoints*
 *__pycache_*
