@@ -97,7 +97,7 @@
     in~\cite{von1951general}.
 
     The paper is structured as follows: in section 2 we first describe the naive
-    implementation of Rule 110 using Ergo scripting language\vk{or pseudocode?}.
+    implementation of Rule 110 using Ergo scripting language \vk{or pseudocode?}.
     Then we discuss the pitfalls arising from compliance with the blockchain
     properties, and show the way to overcome them without language modification.
     Section 3 contains the discussion of the implementation, language
@@ -149,9 +149,17 @@
     elements. The presence of registers both for constants and the script makes
     it easy to verify the persistence of the script. Logical operations and
     collections, in turn, allow verification correctness of the automaton
-    transition (whose state is being stored in the separate register).
+    transition (whose state is being stored in the separate register). The
+    schematics of the transactions is presented on Fig.~\ref{fig:txs}.
 
-    \vk{The simple pseudo-code}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=\textwidth]{cell_tx.pdf}
+        \caption{Transaction chain following Rule 110. \vk{This is
+        placeholder now} \label{fig:txs} }
+    \end{figure}
+
+    \vk{Simple pseudo-code}
 
     With this simple logic the cellular automaton is constructed, and the
     potentially infinite number of sequential transactions in the blockchain
@@ -167,6 +175,7 @@
     of potentially infinite evolution in space and time.
 
     \vk{Implementation reference}
+
     Since the Turing--completeness of the Rule 110 was proven
     in~\cite{cook2004universality}, we conclude that the Ergo system is
     both Turing--complete, and satisfies the blockchain properties.

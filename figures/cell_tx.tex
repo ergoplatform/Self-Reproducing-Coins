@@ -1,7 +1,38 @@
 \documentclass{standalone}
 \usepackage{tikz}
+\usepackage{pgfplots}
 \pgfplotsset{compat=newest}
+\usetikzlibrary{calc}
+\usepackage{ifthen}
+\newcommand\mycolor{white}
+
+\newcommand\txbox[2]{
+    \def\x{3}
+    \def\y{2.5}
+    \def\h{0.5}
+    \def\A{{#1}}
+    \node[anchor=north west] (B) at (\A) {R1};
+    \node[anchor=south west] (C) at ($(\A) + (0,-2*\h)$) {R2};
+    \node (T) at ($(\A) + (8.75*\h,0.5*\h)$) {Output1};
+    \foreach \i in {1,...,15}
+    {
+        \draw \pgfextra{\ifthenelse{\i=2}{\def\mycolor{red!70}}{}}
+                    [fill=\mycolor]
+                    ($(\A) + ({(\i+1)*\h},0)$) 
+                    rectangle 
+                    ($(\A) + ({(\i+2)*\h},-\h)$);
+        %\draw ($({#1}) + ({(\i+1)*\h},0)$) rectangle ($({#1}) + ({(\i+2)*\h},-\h)$);
+    }
+    \node[anchor=south west] (D) at ($(\A) + (1.9*\h,-2.1*\h)$) {$(R2==self.R2)
+    \wedge( R1== Rule110(self.R1) )$};
+    \draw ($(\A) + (0,-\h)$) -- ($(\A) + (\x,{-\h})$);
+    \draw ($(\A) + (2*\h,0)$) -- ($(\A) + (2*\h,-2*\h)$);
+    \draw ($(\A)$) rectangle ($(\A) + (17*\h,-2*\h)$);
+    \draw ($(\A) + (-0.2*\h, \h)$) rectangle ($(\A) + (17.2*\h,-2.2*\h)$);
+}
+
 \begin{document}
     \begin{tikzpicture}
+        \txbox{0,0}{3}
     \end{tikzpicture}
 \end{document}
