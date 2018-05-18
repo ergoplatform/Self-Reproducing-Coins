@@ -108,21 +108,109 @@
     rules.
 
     \section{Rule 110 implementation}
-
     %    Из чего будем строить машину, Описание нужного куска языка Эрго (возможно это тоже в аппендикс)
     %    Код кидаем в аппендикс, тут описываем его логику. Описываем логику преобразования одной строки.
     %    Картинки как с блоками меняется состояние автомата 110
     %    В блокчейне необходимо иметь константное время валидации для выполнения свойства chain growth (GKL). Для Тьюринг полноты нужно уметь работать со строками произвольного размера, чтобы их валидацуия выполнялась за конечное время, из нужно разбивать на подстроки, крайний случай - 1 бит на выход. (ссылка на код либо в аппендикс, либо на гитхаб)
+    Cellular automaton we construct is known as Rule 110.
+    It is a one--dimensional string of 0s and 1s together with evolution rules.
+    The one step evolution of the bit is defined by its value together with the
+    values of the two neighboring bits with the rules shown in the Table
+    \ref{tab:transitions}.
+    \begin{table}
+        \caption{Transition rules for the Rule 110 automaton}
+        \label{tab:transitions}
+        \centering
+        \begin{tabular} {| *{9}{c|} }
+            \hline            
+            Current state & 000 & 001 & 010 & 011 & 100 & 101 & 110 & 111 \\ \hline
+            Next middle bit    & 0 & 1 & 1 & 1 & 0 & 1 & 1 & 0 \\ 
+            \hline  
+        \end{tabular}
+    \end{table}
+    We assume that the current state of the automaton is stored in the register
+    of the transaction output. The idea is to use the next transaction as a single
+    step of the system evolution. In order to achieve this, two main conditions must
+    be verified. First, the same register of the newly generated output contains
+    the updated state of the automaton. Second, the new output must contain
+    exactly the same script. Both conditions require that the transaction input has
+    control of the transaction output. The second condition also implies that
+    transaction input has access to the output script (maybe indirect). It is
+    implicitly present in the vast amount of existing blockchains, since in most
+    cases scripts verify the signature of the spending transaction, which is
+    constructed over the byte array containing the new output script. Although, it
+    may be hardly exploitable. Therefore, the first condition seems more demanding.
 
+    The Ergo scripting language we use treats outputs as the ``boxes'' with the
+    registers. The validation script has access to the new output registers, and
+    resides in a separate register itself. It supports byte arrays, logical
+    operations AND and OR, integer arithmetics, comparison, and sigma protocols
+    for zero knowledge proofs with native support of AND and OR as basic
+    elements. The presence of registers both for constants and the script makes
+    it easy to verify the persistence of the script. Logical operations and
+    collections, in turn, allow verification correctness of the automaton
+    transition (whose state is being stored in the separate register).
+
+    \vk{The simple pseudo-code}
+
+    With this simple logic the cellular automaton is constructed, and the
+    potentially infinite number of sequential transactions in the blockchain
+    furnishes the potentially infinite evolution. However, there is one pitfall
+    left. The size of the data stored in the output must be limited from above.
+    Even more, the general blockchain rules require the transaction validation
+    time to be bound from above, since otherwise the system does not satisfy the
+    chain growth property~\cite{garay2015bitcoin}. The workaround is to split
+    the automaton state between transactions once it becomes too large. As an
+    extreme case one can make a transaction output play a role of a single bit
+    of the automaton. This implementation, while being very inefficient, keeps
+    the logic simple, and complies both the requirements of the blockchain, and
+    of potentially infinite evolution in space and time.
+
+    \vk{Implementation reference}
+    Since the Turing--completeness of the Rule 110 was proven
+    in~\cite{cook2004universality}, we conclude that the Ergo system is
+    both Turing--complete, and satisfies the blockchain properties.
 
     \section{Discussion}
-
     %    Описываем, что мы сделали рекурсию через вызов выходом самого себя, хотя в самом языке нет циклов и рекурсии.
     %    Внутриннюю логику можно усложнять для сокращения количества тактов, что приводит к space-time tradeoff - либо пишешь гигантский скрипт который выполняется за 1 такт, либо скрипт простой, но нужно много тактов.
     %    Правило 110 только это только доказательство полноты, в реальности все делается гораздо эффективнее т.к. в почти любом языке смарт контрактов есть арифметика, не нужно пытаться реализовывать логику через клеточные автоматы.
     %    Показать что это не экзотика, а достежимо в других языках, например язык Waves и Ethereum (+ посмотреть, что еще есть).
     %    Практические выводы: 1) позволяет ответить на вопрос, какой класс задач возможно реализовать в данном языке смарт контрактов. 2) Открывает возможность писать тяжелые смарт контраты, требуемые вычисления которых превышают лимит вычислений на блок, 3) ???
     %    Где же происходят вычисления? ибо мы не задаем алгоритм, а задаем правила верификации. Т.к. в заголовке мы обозначили другой результат, тут обозначить тему и вынести в аппендикс 2
+    The most important move in our work was unwinding recursive calls by means
+    of transaction chaining, although the language contained neither cycles nor
+    recursion. By doing this we let the program be executed over the set of
+    transactions and blocks. This, in turn helped us to pass around the halting
+    problem, which used to make arbitrary script execution impossible inside a
+    transaction in the view of chain growth property. Roughly speaking, single
+    transaction in our approach corresponds to a single cycle of the computation
+    machine. The trade--off is again between the consumed space and execution time:
+    one can either incorporate complex logic in the script, and expect
+    relatively fast execution, or leave the script logic short and simple, but
+    the execution can consume more transactions.
+
+    It worth noting that any practical algorithm implementation can be
+    significantly optimized using the language built--ins such as arithmetic
+    operations. Our construction is not needed for that. It merely just
+    guarantees that any algorithm can be potentially implemented and executed.
+    \vk{We also claim that the described situation is common, and not only
+        restricted to the Ergo language. Using aforementioned point of view one
+        can prove the Turing completeness of another blockchain scripting
+    languages, such as \ldots}
+
+    Another practical conclusion is the fact that one can construct and execute
+    algorithms exceeding the hard computation limit per block by chaining them
+    between different blocks.
+
+    As a drawback, one can argue that the set of validation rules is not exactly
+    the programming language, since it doesn't prescript the sequence of actions,
+    but rather the way to check whether the result is correct. Here we stay on the
+    practical side: in our case the validation description is detailed enough to
+    convert it to the strict sequence of actions, hence it actually defines an
+    algorithm. For the more detailed discussion on the subject we address reader
+    to Appendix~2.
+
     \bibliography{sources}
 
     \section{Appendix 1}
