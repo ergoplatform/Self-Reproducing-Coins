@@ -138,29 +138,29 @@
         \end{tabular}
     \end{table}
 
-    For description of Rule 110 implementation in a blockchain, we will use simplified Bitcoin-like
-    transactions with exactly one input and output. Every output consists of a protecting \script{}
+    For description of Rule 110 implementation in a blockchain, we will use Bitcoin-like
+    transactions consists of inputs and outputs. Every output consists of a protecting \script{}
     and a \payload{} while input is a reference to an output from a previous transaction.
     We will assume that the current state of the automaton is stored in the transaction output's \payload{}.
     The general idea is to use the next transaction as a single
     step of the system evolution. In order to achieve this, two main conditions must
-    be verified. First, the \payload{} of the newly generated output contains
-    the updated state of the automaton. Second, the new output must contain
+    be verified. First, the \payload{} of at least one newly generated output should contain
+    the updated state of the automaton. Second, the this output must contain
     exactly the same script. These conditions require that the transaction input has
-    access to the output's \script{} and \payload{}. It is implicitly present in the
+    access to the output's \script{}s and \payload{}s. It is implicitly present in the
     vast amount of existing blockchains, since in most cases scripts verify the
     signature of the spending transaction, which is constructed over the byte array
-    containing the new output script. This way of access to an output's data may be
+    containing the new outputs scripts. This way of access to an output's data may be
     hardly exploitable and in this section we will assume, that spending script have a
-    direct access to the output.
+    direct access to the outputs.
 
     Keeping all these ideas in mind, we will result to the following script:
 
     \begin{algorithm}[H]
         \caption{Output protecting \script{}}
         \begin{algorithmic}[1]
-            \State isRule110Transformation(self.\payload{}, output.\payload{}) \And{}
-            \State self.\script{} == output.\script{}
+            \State isRule110Transformation(self.\payload{}, output(0).\payload{}) \And{}
+            \State self.\script{} == output(0).\script{}
             \vskip8pt
         \end{algorithmic}
     \end{algorithm}
@@ -170,38 +170,39 @@
     on scripting language features. In \nameref{appendix1} we provide the
     full script implementing the rule 110 on scripting language Ergo blockchain.
 
-%    \begin{algorithm}[H]
-%        \caption{isRule110Transformation function that checks, that transformation from inLayer to outLayer is correct}
-%        \begin{algorithmic}[1]
-%            \Function{\sf isRule110Transformation}{$inLayer$, $outLayer$}
-%            \If{inLayer.size != outLayer.size}
-%
-%            \Return false
-%            \EndIf
-%
-%            \For{i:=1 to outLayer.size}
-%
-%            \Let{ole}{if(i == 0) inLayer(inLayer.size) else inLayer(i)}
-%            \Let{oe}{inLayer(i)}
-%            \Let{ore}{if(i == inLayer.size) inLayer(0) else inLayer(i)}
-%            \Let{ne}{outLayer(i)}
-%
-%            \If{ole == 0 \And{} oe == 0 \And{} ore == 0 \And{} ne !=0} \Return false
-%            \ElsIf{ole == 0 \And{} oe == 0 \And{} ore == 1 \And{} ne !=1} \Return false
-%            \ElsIf{ole == 0 \And{} oe == 1 \And{} ore == 0 \And{} ne !=1} \Return false
-%            \ElsIf{ole == 0 \And{} oe == 1 \And{} ore == 1 \And{} ne !=1} \Return false
-%            \ElsIf{ole == 1 \And{} oe == 0 \And{} ore == 0 \And{} ne !=0} \Return false
-%            \ElsIf{ole == 1 \And{} oe == 0 \And{} ore == 1 \And{} ne !=0} \Return false
-%            \ElsIf{ole == 1 \And{} oe == 1 \And{} ore == 0 \And{} ne !=1} \Return false
-%            \ElsIf{ole == 1 \And{} oe == 1 \And{} ore == 1 \And{} ne !=0} \Return false
-%            \EndIf
-%            \EndFor
-%            \State \Return true
-%            \EndFunction
-%            \vskip8pt
-%        \end{algorithmic}
-%    \end{algorithm}
-%    \dnote{Hmm, we have for loop here.. consider bitwise logic or describe, that fixed size for loop can be implemented as N different operations without a loop? Or remove this pseudocode}
+    % \dnote{Hmm, we have for loop here.. consider bitwise logic or describe, that fixed size for loop can be implemented as N different operations without a loop? Or remove this pseudocode}
+    % можно определить функцию проверки одного бита, и затем вызывать ее нужное количество раз для каждого бита в слое, типа check110(0) && check110(1) && check110(2) && check110(3) && check110(4) && check110(5)
+    %    \begin{algorithm}[H]
+    %        \caption{isRule110Transformation function that checks, that transformation from inLayer to outLayer is correct}
+    %        \begin{algorithmic}[1]
+    %            \Function{\sf isRule110Transformation}{$inLayer$, $outLayer$}
+    %            \If{inLayer.size != outLayer.size}
+    %
+    %            \Return false
+    %            \EndIf
+    %
+    %            \For{i:=1 to outLayer.size}
+    %
+    %            \Let{ole}{if(i == 0) inLayer(inLayer.size) else inLayer(i)}
+    %            \Let{oe}{inLayer(i)}
+    %            \Let{ore}{if(i == inLayer.size) inLayer(0) else inLayer(i)}
+    %            \Let{ne}{outLayer(i)}
+    %
+    %            \If{ole == 0 \And{} oe == 0 \And{} ore == 0 \And{} ne !=0} \Return false
+    %            \ElsIf{ole == 0 \And{} oe == 0 \And{} ore == 1 \And{} ne !=1} \Return false
+    %            \ElsIf{ole == 0 \And{} oe == 1 \And{} ore == 0 \And{} ne !=1} \Return false
+    %            \ElsIf{ole == 0 \And{} oe == 1 \And{} ore == 1 \And{} ne !=1} \Return false
+    %            \ElsIf{ole == 1 \And{} oe == 0 \And{} ore == 0 \And{} ne !=0} \Return false
+    %            \ElsIf{ole == 1 \And{} oe == 0 \And{} ore == 1 \And{} ne !=0} \Return false
+    %            \ElsIf{ole == 1 \And{} oe == 1 \And{} ore == 0 \And{} ne !=1} \Return false
+    %            \ElsIf{ole == 1 \And{} oe == 1 \And{} ore == 1 \And{} ne !=0} \Return false
+    %            \EndIf
+    %            \EndFor
+    %            \State \Return true
+    %            \EndFunction
+    %            \vskip8pt
+    %        \end{algorithmic}
+    %    \end{algorithm}
 
     % описание скрипта может быть понадобится в апендиксе
     %    The Ergo scripting language we use treats outputs as the ``boxes'' with the
