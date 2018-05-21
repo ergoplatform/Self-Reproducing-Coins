@@ -44,9 +44,10 @@
         it constructing the simple universal Turing machine using
         the small set of features of the scripting language in the unspent
         transaction output (UTXO) model, which admits the relations between
-        input and output transaction states.\dnote{Don't like `minimalistic`
-        here, UTXO may be not so cryitical and may be even incorrect if we'll
-    add waves example} 
+        input and output transaction states.
+        %\dnote{Don't like `minimalistic`
+        %here, UTXO may be not so cryitical and may be even incorrect if we'll
+    %add waves example} 
     \keywords{smart contracts, Turing completeness, blockchain, cellular
     automata}
     \end{abstract}
@@ -70,21 +71,21 @@
     contract platforms with the emphasis on the language
     universality. For example, in~\cite{buterin2014next} authors introduced the
     $jump$ opcode in the transaction scripting language in order to incorporate
-    loops. This resulted in several formal and security
-    complications\vk{citations for gas and security issues}. However,
-    the main obstacles to the formal Turing completeness in the bolckchain,
-    namely potentially infinite execution time, and potentially infinite storage
-    memory, still persist.
+    loops. Their approach, while being successful in general, exposed few
+    significant complications both from formal and security
+    sides~\cite{momot2016seven,CVE201810705}. However, the main obstacles for
+    the formal Turing completeness in the bolckchain, namely potentially
+    infinite execution time, and potentially infinite storage memory, still
+    persist.
 
-    Turing complete programming language is the language admitting description
+    Turing complete programming language is the language which admits description
     of the universal Turing machine. The universal Turing machine is the Turing
     machine which can simulate any other Turing machine; its existence is one of
     the main results of the Turing theory~\cite{turing1937computable}. The study
     of Turing machines is strongly motivated by the Church--Turing thesis, which
     states that Turing machines are capable of universal computation. This
     thesis is often viewed at as a definition of computation and
-    computability~\cite{turing1939systems} \vk{find out overhead for simulating
-    quantum computer to see whether it is obsolete}. The set of known
+    computability~\cite{turing1939systems}. The set of known
     computation devices and models was rapidly growing during the twentieth
     century, and the methods of their analysis were improved as well. The
     usual way of proving the Turing completeness of a system of rules, device or
@@ -93,7 +94,7 @@
     The most important example for our work is one--dimensional
     cellular automaton called Rule 110. It was conjectured to be Turing complete
     by S.~Wolfram~\cite{wolfram1986theory}. The conjecture was proven by
-    M.~Cook~\cite{cook2004universality}, who was able to simulate the cyclic tag
+    M.~Cook~\cite{cook2004universality}, who was able to use it to emulate the cyclic tag
     system. The cyclic tag system can emulate the tag systems, which were
     introduced by E.~L.~Post, and are shown to be capable of emulating universal
     Turing machines~\cite{post1943formal}\dnote{remove last sentence?} \vk{Maybe
@@ -269,9 +270,9 @@
     Since the Turing--completeness of the Rule 110 was proven
     in~\cite{cook2004universality}, we conclude that even though the scripting
     language itself does not allow infinite loops, Turing--completeness of the
-    system can be achieved by combining multiple transactions together. \vk{Note
-        that the language requirements are not demanding, and they are met in a
-    number of platforms.}
+    system can be achieved by combining multiple transactions together. Note
+    that our language requirements are not very demanding, and can be met in a
+    number of platforms avoiding usage of complicated ad--hoc structures.
 
     \section{Discussion}
     %    Описываем, что мы сделали рекурсию через вызов выходом самого себя, хотя в самом языке нет циклов и рекурсии.
