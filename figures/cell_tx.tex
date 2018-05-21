@@ -12,26 +12,34 @@
     \def\y{2.5}
     \def\h{0.5}
     \def\A{{#1}}
-    \node[anchor=north west] (B) at (\A) {R1};
-    \node[anchor=south west] (C) at ($(\A) + (0,-2*\h)$) {R2};
-    \node (T) at ($(\A) + (8.75*\h,0.5*\h)$) {Output{#2}};
-    \node (I) at ($(\A) + (-2.3*\h,-0.6*\h)$) {Input{#2}};
-    \foreach \i in {1,...,15}
+    \node[anchor=north west] (B) at (\A) {$payload$};
+    \node[anchor=north west] (C) at ($(\A) + (0,-\h)$) {$script$};
+    \node (T) at ($(\A) + (8.75*\h,0.5*\h)$) {Output[0]};
+    \node (I) at ($(\A) + (-2.3*\h,-0.6*\h)$) {Input[x{#2}]};
+    \foreach \i in {1,...,14}
     {
-        \draw ($(\A) + ({(\i+1)*\h},0)$) 
+        \draw ($(\A) + ({(\i+2)*\h},0)$) 
                     rectangle 
-                    ($(\A) + ({(\i+2)*\h},-\h)$);
+                    ($(\A) + ({(\i+3)*\h},-\h)$);
     }
-    \node[anchor=south west] (D) at ($(\A) + (1.9*\h,-2.1*\h)$) {$(R2==self.R2)
-    \wedge( R1== Rule110(self.R1) )$};
+    %\node[anchor=south west] (D) at ($(\A) + (1.9*\h,-2.1*\h)$) {$(R2==self.R2)
+    %\wedge( R1== Rule110(self.R1) )$};
     \draw ($(\A) + (0,-\h)$) -- ($(\A) + (\x,{-\h})$);
-    \draw ($(\A) + (2*\h,0)$) -- ($(\A) + (2*\h,-2*\h)$);
+    \draw ($(\A) + (3*\h,0)$) -- ($(\A) + (3*\h,-2*\h)$);
     \draw ($(\A)$) rectangle ($(\A) + (17*\h,-2*\h)$);
+    \draw[fill=gray!50] ($(\A) + (3*\h,-\h)$) rectangle ($(\A) + (17*\h,-2*\h)$);
     \draw ($(\A) + (-0.2*\h, \h)$) rectangle ($(\A) + (17.2*\h,-2.2*\h)$);
-    \draw ($(\A) + (-4*\h, 2.5*\h)$) rectangle ($(\A) + (17.4*\h,-2.4*\h)$);
+    \draw[thick] ($(\A) + (-4*\h, 2.5*\h)$) rectangle ($(\A) + (17.4*\h,-4*\h)$);
     \draw ($(\A) + (-3.8*\h, \h)$) rectangle ($(\A) + (-0.8*\h,-2.2*\h)$);
     \draw ($(\A) + (-4*\h, 1.5*\h)$) -- node[above, midway] {Transaction {#2}} ($(\A) + (17.4*\h,1.5*\h)$);
     \draw[color=blue,densely dotted, very thick] ($(\A) + (-0.8*\h, -0.6*\h)$) -- ($(\A) + (-0.2*\h,-0.6*\h)$);
+    \node (NN) at ($(\A) + (6.7*\h,-3*\h)$) {$\cdots$};
+}
+
+\newcommand\chainArr[4]{
+    \draw[very thick, blue, >=stealth,->] ({#1},{#2}) -- ({#1+0.5},{#2}) -- 
+    ({#1+0.5},{0.5*#4+0.5*#2}) -- ({#3-0.5},{0.5*#4+0.5*#2}) -- 
+    ({#3-0.5},{#4}) -- ({#3},{#4});
 }
 
 \begin{document}
@@ -39,36 +47,46 @@
         X/.style={draw=gray, minimum size=4mm, outer sep=0pt},
         B/.style={X, fill},
         C/.style={X, fill=red!80},
+        D/.style={X, fill=blue!80},
+        E/.style={X, fill=brown!80},
         mymatrix/.style={matrix of nodes, row
             sep=-\pgflinewidth,
             column sep=-\pgflinewidth, nodes={X}, nodes in
         empty cells}
     ]
+
     \def\h{0.5}
     \txbox{0,0}{1}
-    \txbox{12,0}{2}
-    \txbox{24,0}{3}
-    \draw[->, >=stealth, very thick, blue](-2.5,-0.3) -- (-2,-0.3);
-    \draw[->, >=stealth, very thick, blue](8.6,-0.3) -- (10.1,-0.3);
-    \draw[->, >=stealth, very thick, blue](20.6,-0.3) -- (22.1,-0.3);
-    \draw[->, >=stealth, very thick, blue](32.7,-0.3) -- (33.2,-0.3);
-    \draw[very thick, dotted](-2,-1.2) -- (12.35,-4);
-    \draw[very thick, dotted](32.7,-1.2) -- (18.35,-4);
+    \txbox{0,-4}{2}
+    \txbox{0,-8}{3}
+    \chainArr{8.6}{-0.3}{-1.9}{-4.3}
+    \chainArr{8.6}{-4.3}{-1.9}{-8.3}
+    \draw[very thick, dotted](9.2,-0.2) -- (12.5,-3.75);
+    \draw[very thick, dotted](9.2,-4.2) -- (12.5,-4.25);
+    \draw[very thick, dotted](9.2,-8.2) -- (12.5,-4.7);
 
-    \foreach \i in {5.5,6,7, 17.5,18,18.5,19, 28.5,29, 31}
+    \foreach \i in {5.5,6,7}
     {
-        \draw[fill=red!80] ($(\i,0)$) rectangle ($({\i+\h},-\h)$);
+        \draw[C] ($(\i,0)$) rectangle ($({\i+\h},-\h)$);
     }
 
+    \foreach \i in {5,5.5,6,6.5,7}
+    {
+        \draw[D] ($(\i,-4)$) rectangle ($({\i+\h},-4-\h)$);
+    }
+    \foreach \i in {4.5,5, 7}
+    {
+        \draw[E] ($(\i,-8)$) rectangle ($({\i+\h},-8-\h)$);
+    }
     \matrix at (15.35,-4) [mymatrix]{
-        &&&&&&&&&&&&|[B]|&&\\
-        &&&&&&&&&&&|[B]|&|[B]|&&\\
-        &&&&&&&&&&|[B]|&|[B]|&|[B]|&&\\
-        &&&&&&&&&|[C]|&|[C]|&&|[C]|&&\\
-        &&&&&&&&|[C]|&|[C]|&|[C]|&|[C]|&|[C]|&&\\
-        &&&&&&&|[C]|&|[C]|&&&&|[C]|&&\\
-        &&&&&&|[B]|&|[B]|&|[B]|&&&|[B]|&|[B]|&&\\
-        &&&&&|[B]|&|[B]|&&|[B]|&&|[B]|&|[B]|&|[B]|&&\\
+        &&&&&&&&&&&|[B]|&&\\
+        &&&&&&&&&&|[B]|&|[B]|&&\\
+        &&&&&&&&&|[B]|&|[B]|&|[B]|&&\\
+        &&&&&&&&|[C]|&|[C]|&&|[C]|&&\\
+        &&&&&&&|[D]|&|[D]|&|[D]|&|[D]|&|[D]|&&\\
+        &&&&&&|[E]|&|[E]|&&&&|[E]|&&\\
+        &&&&&|[B]|&|[B]|&|[B]|&&&|[B]|&|[B]|&&\\
+        &&&&|[B]|&|[B]|&&|[B]|&&|[B]|&|[B]|&|[B]|&&\\
     };
     \end{tikzpicture}
 \end{document}
