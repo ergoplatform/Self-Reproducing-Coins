@@ -7,13 +7,15 @@
 \bibliographystyle{splncs04}
 
 \usepackage{nameref}
+\usepackage{hyperref}
+\usepackage{amsmath}
 \newcommand{\knote}[1]{\textcolor{green}{A: {#1}}}
 \newcommand{\dnote}[1]{\textcolor{red}{D: {#1}}}
 \newcommand{\vk}[1]{\textcolor{blue}{V: {#1}}}
 \newcommand{\payload}{\textit{payload}}
 \newcommand{\script}{\textit{script}}
 %\newcommand{\And}{\&\&}
-\newcommand{\And}{\wedge}
+%\newcommand{\And}{\wedge}
 %\def\Let#1#2{\State #1 $\gets$ #2}
 
 \begin{document}
@@ -37,14 +39,17 @@
         % выходным и входным состояниями транзакции.
         Turing completeness of the smart contract languages in the blockchain
         systems is often associated with the variety of the language features
-        (such as loops) within a context of a single transaction. We show that
-        even if the language itself lacks explicit recursion or loops, Turing
-        completeness can be achieved through unwinding the recursive calls between
+        (such as loops) within a context of a single transaction.
+        A more fundamental problem is combining unpredictability of arbitrary
+        script execution time with the blockchain requirements.
+        We show that Turing completeness in blockchain environment can
+        be achieved through unwinding the recursive calls between
         multiple transactions and blocks instead of using a single one. We prove
         it constructing the simple universal Turing machine using
         the small set of features of the scripting language in the unspent
         transaction output (UTXO) model, which admits the relations between
         input and output transaction states.
+        Neither \vk{unbound} loops nor infinite validation time is needed in this approach.
         %\dnote{Don't like `minimalistic`
         %here, UTXO may be not so cryitical and may be even incorrect if we'll
     %add waves example} 
@@ -69,14 +74,17 @@
     is implemented in the special purpose Script language, which is believed not
     to be Turing complete. This belief stimulated development of another smart
     contract platforms with the emphasis on the language
-    universality. For example, in~\cite{buterin2014next} authors introduced the
-    $jump$ opcode in the transaction scripting language in order to incorporate
-    loops. Their approach, while being successful in general, exposed few
-    significant complications both from formal and security
-    sides~\cite{momot2016seven,CVE201810705}. However, the main obstacles for
-    the formal Turing completeness in the bolckchain, namely potentially
-    infinite execution time, and potentially infinite storage memory, still
-    persist.
+    universality. Particularly, in Ethereum~\cite{buterin2014next} the $jump$ opcode was introduced
+    in the transaction scripting language in order to incorporate
+    unlimited loops. However Turing--completeness of this system is still a
+    subject of debates mostly due to the halt problem undecidability.
+    For example, in~\cite{miller2016ethereum} it was pointed
+    that Turing--complete languages are fundamentally inappropriate for writing
+    smart contracts as soon as their execution is halted after some bounded time.
+    \dnote{Listen to Andrew video to ensure, he was serious here}
+%    Their approach, while being successful in general, exposed few
+%    significant complications both from formal and security
+%    sides~\cite{atzei2017survey,momot2016seven}.
 
     Turing complete programming language is the language which admits description
     of the universal Turing machine. The universal Turing machine is the Turing
@@ -90,16 +98,12 @@
     century, and the methods of their analysis were improved as well. The
     usual way of proving the Turing completeness of a system of rules, device or
     the language is using it to emulate the system that is already proven to be
-    Turing complete. \dnote{May be one of the most simple Turing complete system}
-    The most important example for our work is one--dimensional
+    Turing complete.
+    The system extensively used in our work is one--dimensional
     cellular automaton called Rule 110. It was conjectured to be Turing complete
     by S.~Wolfram~\cite{wolfram1986theory}. The conjecture was proven by
-    M.~Cook~\cite{cook2004universality}, who was able to use it to emulate the cyclic tag
-    system. The cyclic tag system can emulate the tag systems, which were
-    introduced by E.~L.~Post, and are shown to be capable of emulating universal
-    Turing machines~\cite{post1943formal}\dnote{remove last sentence?} \vk{Maybe
-        reformulate then. It would be good to keep the full chain of proofs to
-    highlight the formal correctness}.
+    M.~Cook~\cite{cook2004universality} based on the previous works by
+    E.~L.~Post~\cite{post1943formal}.
 
     The utter internal simplicity of Rule 110 makes it an appealing system for
     the proofs of Turing completeness. In the present work we prove Turing
@@ -113,11 +117,11 @@
     underlying idea of complexity growth is similar to one expressed
     in~\cite{von1951general}.
 
-    The paper is structured as follows: in section 2 we first describe the naive
-    implementation of Rule 110 using simple Bitcoin-like scripting language.
+    The paper is structured as follows: in Section \ref{section2} we first describe the naive
+    implementation of Rule 110 using simple Bitcoin--like scripting language.
     Then we discuss the pitfalls arising from compliance with the blockchain
     properties, and show the way to overcome them without language modification.
-    Section 3 contains the discussion of the implementation, language
+    Section \ref{section3} contains the discussion of the implementation, language
     requirements, and usability of the method for the real--world blockchain
     applications. \nameref{appendix1} contains the Rule 110 implementations with smart
     contract languages of existing blockchain platforms. \nameref{appendix2} sketches
@@ -125,6 +129,7 @@
     scripting and validation rules.
 
     \section{Rule 110 implementation}
+    \label{section2}
     %    Из чего будем строить машину, Описание нужного куска языка Эрго (возможно это тоже в аппендикс)
     %    Код кидаем в аппендикс, тут описываем его логику. Описываем логику преобразования одной строки.
     %    Картинки как с блоками меняется состояние автомата 110
@@ -146,7 +151,7 @@
         \end{tabular}
     \end{table}
 
-    For description of Rule 110 implementation in a blockchain, we use Bitcoin--like
+    For the description of Rule 110 implementation in a blockchain, we use Bitcoin--like
     transactions consisting of inputs and outputs. Every output consists of a protecting \script{}
     and a \payload{} while input is a reference to an output from a previous transaction.
     We will assume that the current state of the automaton is stored in the transaction output's \payload{}.
@@ -158,17 +163,18 @@
     have access to the output's \script{}s and \payload{}s. It is implicitly
     present in the vast amount of existing blockchains, since in most cases
     scripts verify the signature of the spending transaction, which is
-    constructed over the byte array containing the new outputs scripts. However,
+    constructed over the byte array containing the new outputs. However,
     this way of access to an output's data may be hardly exploitable. In this
     section we assume, that spending script has a direct access to the
     outputs.
 
     Keeping all these in mind, we come to the following validation
     script structure:
-    \begin{eqnarray*}
-        isRule110Transformation(self.\payload{}, output[0].\payload{}) \And{} \\
+    \begin{equation}
+        \label{eq:script}
+        isRule110(self.\payload{},\, output[0].\payload{}) \wedge \\
         (self.\script{} == output[0].\script{})
-    \end{eqnarray*}
+    \end{equation}
     %shown in the Algorithm~\ref{alg:prot}.
     %\begin{algorithm}[H]
     %    \caption{Output protecting \script{}}
@@ -181,11 +187,11 @@
     %        \vskip8pt
     %    \end{algorithmic}
     %\end{algorithm}
-    The function $isRule110Transformation$ returns $true$ if and only if the second argument
+    The function $isRule110$ returns $true$ if and only if the second argument
     is the one step Rule 110 transformation of the first argument. It may be
     implemented in a number of ways based on scripting language features. In
     \nameref{appendix1} we provide the full script implementing the rule 110 in
-    the scripting language of the Ergo blockchain.
+    the language of the Ergo blockchain.
 
     % \dnote{Hmm, we have for loop here.. consider bitwise logic or describe, that fixed size for loop can be implemented as N different operations without a loop? Or remove this pseudocode}
     % можно определить функцию проверки одного бита, и затем вызывать ее нужное количество раз для каждого бита в слое, типа check110(0) && check110(1) && check110(2) && check110(3) && check110(4) && check110(5)
@@ -234,14 +240,14 @@
     %    schematics of the transactions is presented on Fig.~\ref{fig:txs}.
 
     With this script constructed, cellular automaton evolution may be started by
-    chaining transactions in a blockchain. Figure \ref{fig:txs} shows three
+    chaining transactions in a blockchain. Fig.~\ref{fig:txs} shows three
     transactions (at the left), each one representing the iteration of Rule 110
     automaton (at the right).
 
     \begin{figure}[h]
         \centering
         \includegraphics[width=\textwidth]{cell_tx.pdf}
-        \caption{Transaction chain following Rule 110. See the text for the
+        \caption{Transaction chain following Rule 110. See Eq.~\eqref{eq:script} for the
             $script$ field description.
         %\vk{This is placeholder now}
         %\dnote{replace R1 with \payload{} and R2 with \script{}, put correct script.
@@ -254,14 +260,14 @@
     blockchain leads to the potentially infinite evolution of cellular
     automaton which is necessary for Turing--complete systems.
     However, there is one pitfall left.
-    The size of the data stored in the output must be limited from above.
-    Even more, the general blockchain rules require the transaction validation
-    time to be bound from above, since otherwise the system does not satisfy the
-    chain growth property~\cite{garay2015bitcoin}. The workaround is to split
+    The size of the data stored in the output must be limited from above, since
+    the general blockchain rules~\cite{garay2015bitcoin} require the transaction validation
+    time to be bound from above in order to satisfy the
+    chain growth property. The workaround is to split
     the automaton state between transactions once it becomes too large. As an
     extreme case one can make a transaction output play a role of a single bit
-    of the automaton. This implementation, while being inefficient, keeps
-    the logic simple, and complies both the requirements of the blockchain, and
+    of the automaton. While being inefficient this implementation keeps
+    the logic simple and complies with the requirements of the blockchain and
     of potentially infinite evolution in space and time. Particular script
     implementation of this logic is provided in \nameref{appendix1}.
 
@@ -272,9 +278,10 @@
     language itself does not allow infinite loops, Turing--completeness of the
     system can be achieved by combining multiple transactions together. Note
     that our language requirements are not very demanding, and can be met in a
-    number of platforms avoiding usage of complicated ad--hoc structures.
+    number of platforms avoiding complicated ad--hoc structures.
 
     \section{Discussion}
+    \label{section3}
     %    Описываем, что мы сделали рекурсию через вызов выходом самого себя, хотя в самом языке нет циклов и рекурсии.
     %    Внутриннюю логику можно усложнять для сокращения количества тактов, что приводит к space-time tradeoff - либо пишешь гигантский скрипт который выполняется за 1 такт, либо скрипт простой, но нужно много тактов.
     %    Правило 110 только это только доказательство полноты, в реальности все делается гораздо эффективнее т.к. в почти любом языке смарт контрактов есть арифметика, не нужно пытаться реализовывать логику через клеточные автоматы.
@@ -316,11 +323,11 @@
 
     \bibliography{sources}
 
-    \section{Appendix 1}
+    \section{Appendix~1}
     \label{appendix1}
     %    Код правила 110 на Эрго языке ( и ссылка на гитхаб)
 
-    \section{Appendix 2}
+    \section{Appendix~2}
     \label{appendix2}
 
     %    Где же происходят вычисления? ибо мы не задаем алгоритм, а задаем правила верификации. Можно сравнение, что в обычном компьютере движущая сила это электричество.. Оффчейн вычисления - требуем найти корни многочлена, или дискретный логарифм.. Посмотреть на декларативные языки программирования, может какие-нидь клеточные автоматы в экселе. Pay-for-proof contracts из биткоина.

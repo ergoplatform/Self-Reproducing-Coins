@@ -29,15 +29,15 @@
     \draw ($(\A)$) rectangle ($(\A) + (17*\h,-2*\h)$);
     \draw[fill=gray!50] ($(\A) + (3*\h,-\h)$) rectangle ($(\A) + (17*\h,-2*\h)$);
     \draw ($(\A) + (-0.2*\h, \h)$) rectangle ($(\A) + (17.2*\h,-2.2*\h)$);
-    \draw[thick] ($(\A) + (-4*\h, 2.5*\h)$) rectangle ($(\A) + (17.4*\h,-4*\h)$);
+    \draw[very thick] ($(\A) + (-4*\h, 2.5*\h)$) rectangle ($(\A) + (17.4*\h,-4*\h)$);
     \draw ($(\A) + (-3.8*\h, \h)$) rectangle ($(\A) + (-0.8*\h,-2.2*\h)$);
     \draw ($(\A) + (-4*\h, 1.5*\h)$) -- node[above, midway] {Transaction {#2}} ($(\A) + (17.4*\h,1.5*\h)$);
-    \draw[color=blue,densely dotted, very thick] ($(\A) + (-0.8*\h, -0.6*\h)$) -- ($(\A) + (-0.2*\h,-0.6*\h)$);
+    \draw[densely dotted, very thick] ($(\A) + (-0.8*\h, -0.6*\h)$) -- ($(\A) + (-0.2*\h,-0.6*\h)$);
     \node (NN) at ($(\A) + (6.7*\h,-3*\h)$) {$\cdots$};
 }
 
 \newcommand\chainArr[4]{
-    \draw[very thick, blue, >=stealth,->] ({#1},{#2}) -- ({#1+0.5},{#2}) -- 
+    \draw[very thick, >=stealth,->] ({#1},{#2}) -- ({#1+0.5},{#2}) --
     ({#1+0.5},{0.5*#4+0.5*#2}) -- ({#3-0.5},{0.5*#4+0.5*#2}) -- 
     ({#3-0.5},{#4}) -- ({#3},{#4});
 }
@@ -46,9 +46,9 @@
     \begin{tikzpicture}[
         X/.style={draw=gray, minimum size=4mm, outer sep=0pt},
         B/.style={X, fill},
-        C/.style={X, fill=red!80},
-        D/.style={X, fill=blue!80},
-        E/.style={X, fill=brown!80},
+        C/.style={X, fill=black!15!red},
+        D/.style={X, fill=black!15!red},
+        E/.style={X, fill=black!15!red},
         mymatrix/.style={matrix of nodes, row
             sep=-\pgflinewidth,
             column sep=-\pgflinewidth, nodes={X}, nodes in
@@ -64,6 +64,8 @@
     \draw[very thick, dotted](9.2,-0.2) -- (12.5,-3.75);
     \draw[very thick, dotted](9.2,-4.2) -- (12.5,-4.25);
     \draw[very thick, dotted](9.2,-8.2) -- (12.5,-4.7);
+    \draw[very thick, ->, >=stealth](8.6,-8.3) -- (9.2,-8.3);
+    \draw[very thick, ->, >=stealth](-2.5,-0.3) -- (-1.9,-0.3);
 
     \foreach \i in {5.5,6,7}
     {

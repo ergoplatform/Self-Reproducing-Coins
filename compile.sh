@@ -4,6 +4,7 @@ rm rule110.out
 rm rule110.log
 rm rule110.bbl
 rm rule110.blg
+pdflatex figures/cell_tx
 pdflatex rule110
 bibtex rule110
 pdflatex rule110
