@@ -1,19 +1,24 @@
 \documentclass{standalone}
 \usepackage{tikz}
 \usepackage{pgfplots}
-\pgfplotsset{compat=newest}
+%\pgfplotsset{compat=newest}
 \usetikzlibrary{calc}
 \usepackage{ifthen}
 \newcommand\mycolor{white}
 \usetikzlibrary{matrix}
+\usetikzlibrary{patterns}
 
 \begin{document}
     \begin{tikzpicture}[
         X/.style={draw=gray, minimum size=5mm, outer sep=0pt},
         B/.style={X, fill},
         C/.style={X, fill=black!15!red},
-        D/.style={X, fill=black!15!red},
-        E/.style={X, fill=black!15!red},
+        D/.style={X, preaction={fill, gray}, pattern=north west lines, pattern color=black!15!red},
+        E/.style={X, preaction={fill, gray}, pattern=north west lines, pattern color=black},
+        F/.style={X, preaction={fill, gray}, pattern=north west lines, pattern color=white},
+%    D/.style={X, preaction={fill, black!15!red}, pattern=north west lines},
+%    E/.style={X, preaction={fill, black}, pattern=north west lines, pattern color=white},
+%    F/.style={X, preaction={fill, white}, pattern=north west lines},
         mymatrix/.style={matrix of nodes, row
             sep=-\pgflinewidth,
             column sep=-\pgflinewidth, nodes={X}, nodes in
@@ -27,75 +32,75 @@
     \def\xmax{3}
 
     \matrix at (0,\dy)[mymatrix]{
-        &|[C]|\\
+        &|[D]|\\
         |[B]|&|[C]|\\
-        |[B]|&|[C]|\\
+        |[B]|&|[D]|\\
     };
 
     \matrix at (0,0)[mymatrix]{
+        |[B]|&|[F]|\\
         |[B]|&\\
-        |[B]|&\\
-        |[B]|&\\
+        |[B]|&|[F]|\\
     };
 
     \matrix at (0,-\dy)[mymatrix]{
+        |[B]|&|[D]|\\
         |[B]|&|[C]|\\
-        |[B]|&|[C]|\\
-        &|[C]|\\
+        &|[D]|\\
     };
 
     \matrix at (\dx,\dy)[mymatrix]{
-        &|[B]|\\
+        &|[E]|\\
         |[C]|&|[B]|\\
-        &|[B]|\\
+        &|[E]|\\
     };
 
     \matrix at (\dx,0)[mymatrix]{
-        |[C]|&|[C]|\\
+        |[C]|&|[D]|\\
         &|[C]|\\
-        |[C]|&|[C]|\\
+        |[C]|&|[D]|\\
     };
 
     \matrix at (\dx,-\dy)[mymatrix]{
-        &|[B]|\\
+        &|[E]|\\
         |[C]|&|[B]|\\
-        |[B]|&|[B]|\\
+        |[B]|&|[E]|\\
     };
 
     \matrix at (2*\dx,\dy)[mymatrix]{
-        &|[B]|\\
+        &|[E]|\\
         |[B]|&|[B]|\\
-        |[C]|&|[B]|\\
+        |[C]|&|[E]|\\
     };
 
     \matrix at (2*\dx,0)[mymatrix]{
-        |[B]|&\\
+        |[B]|&|[F]|\\
         |[C]|&\\
-        |[B]|&\\
+        |[B]|&|[F]|\\
     };
 
     \matrix at (2*\dx,-\dy)[mymatrix]{
-        |[C]|&\\
+        |[C]|&|[F]|\\
         |[B]|&\\
-        |[B]|&\\
+        |[B]|&|[F]|\\
     };
 
     \matrix at (3*\dx,\dy)[mymatrix]{
-        &|[B]|\\
+        &|[E]|\\
         |[B]|&|[B]|\\
-        &|[B]|\\
+        &|[E]|\\
     };
 
     \matrix at (3*\dx,0)[mymatrix]{
-        |[B]|&|[B]|\\
+        |[B]|&|[E]|\\
         &|[B]|\\
-        &|[B]|\\
+        &|[E]|\\
     };
 
     \matrix at (3*\dx,-\dy)[mymatrix]{
+        &|[F]|\\
         &\\
-        &\\
-        &\\
+        &|[F]|\\
     };
 
     \foreach \y in {-1,0,1}{
@@ -127,7 +132,7 @@
         &&&&&&&&&&|[B]|&|[B]|&&\\
         &&&&&&&&&|[B]|&|[B]|&|[B]|&&\\
         &&&&&&&&|[B]|&|[C]|&&|[C]|&&\\
-        &&&&&&&|[B]|&|[B]|&|[B]|&|[D]|&|[B]|&&\\
+        &&&&&&&|[B]|&|[B]|&|[B]|&|[C]|&|[B]|&&\\
         &&&&&&|[B]|&|[B]|&&&&|[B]|&&\\
         &&&&&|[B]|&|[B]|&|[B]|&&&|[B]|&|[B]|&&\\
         &&&&|[B]|&|[B]|&&|[B]|&&|[B]|&|[B]|&|[B]|&&\\
