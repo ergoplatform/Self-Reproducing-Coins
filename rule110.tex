@@ -8,15 +8,15 @@
 
 \usepackage{nameref}
 \usepackage{hyperref}
-\usepackage{amsmath}
+%\usepackage{amsmath}
 \newcommand{\knote}[1]{\textcolor{green}{A: {#1}}}
 \newcommand{\dnote}[1]{\textcolor{red}{D: {#1}}}
 \newcommand{\vk}[1]{\textcolor{blue}{V: {#1}}}
 \newcommand{\payload}{\textit{payload}}
 \newcommand{\script}{\textit{script}}
-%\newcommand{\And}{\&\&}
+\newcommand{\And}{\&\&}
 %\newcommand{\And}{\wedge}
-%\def\Let#1#2{\State #1 $\gets$ #2}
+\def\Let#1#2{\State #1 $\gets$ #2}
 
 \begin{document}
     \title{Self--replicating UTXOs as universal Turing Machine}
@@ -188,44 +188,38 @@
     %    \end{algorithmic}
     %\end{algorithm}
     The function $isRule110$ returns $true$ if and only if the second argument
-    is the one step Rule 110 transformation of the first argument. It may be
-    implemented in a number of ways based on scripting language features. In
+    is the one step Rule 110 transformation of the first argument.
+    Pseudocode algorithm of this check is shown at Alg. \ref{alg:isRule110}, in
     \nameref{appendix1} we provide the full script implementing the rule 110 in
     the language of the Ergo blockchain.
 
-    % \dnote{Hmm, we have for loop here.. consider bitwise logic or describe, that fixed size for loop can be implemented as N different operations without a loop? Or remove this pseudocode}
-    % можно определить функцию проверки одного бита, и затем вызывать ее нужное количество раз для каждого бита в слое, типа check110(0) && check110(1) && check110(2) && check110(3) && check110(4) && check110(5)
-    %    \begin{algorithm}[H]
-    %        \caption{isRule110Transformation function that checks, that transformation from inLayer to outLayer is correct}
-    %        \begin{algorithmic}[1]
-    %            \Function{\sf isRule110Transformation}{$inLayer$, $outLayer$}
-    %            \If{inLayer.size != outLayer.size}
-    %
-    %            \Return false
-    %            \EndIf
-    %
-    %            \For{i:=1 to outLayer.size}
-    %
-    %            \Let{ole}{if(i == 0) inLayer(inLayer.size) else inLayer(i)}
-    %            \Let{oe}{inLayer(i)}
-    %            \Let{ore}{if(i == inLayer.size) inLayer(0) else inLayer(i)}
-    %            \Let{ne}{outLayer(i)}
-    %
-    %            \If{ole == 0 \And{} oe == 0 \And{} ore == 0 \And{} ne !=0} \Return false
-    %            \ElsIf{ole == 0 \And{} oe == 0 \And{} ore == 1 \And{} ne !=1} \Return false
-    %            \ElsIf{ole == 0 \And{} oe == 1 \And{} ore == 0 \And{} ne !=1} \Return false
-    %            \ElsIf{ole == 0 \And{} oe == 1 \And{} ore == 1 \And{} ne !=1} \Return false
-    %            \ElsIf{ole == 1 \And{} oe == 0 \And{} ore == 0 \And{} ne !=0} \Return false
-    %            \ElsIf{ole == 1 \And{} oe == 0 \And{} ore == 1 \And{} ne !=0} \Return false
-    %            \ElsIf{ole == 1 \And{} oe == 1 \And{} ore == 0 \And{} ne !=1} \Return false
-    %            \ElsIf{ole == 1 \And{} oe == 1 \And{} ore == 1 \And{} ne !=0} \Return false
-    %            \EndIf
-    %            \EndFor
-    %            \State \Return true
-    %            \EndFunction
-    %            \vskip8pt
-    %        \end{algorithmic}
-    %    \end{algorithm}
+    \begin{algorithm}[H]
+        \caption{isRule110 function that checks, that transformation from inLayer to outLayer is correct}
+        \label{alg:isRule110}
+        \begin{algorithmic}[1]
+            \Function{\sf isRule110}{$inLayer$, $outLayer$}
+
+            \Function{\sf calcBit}{$i$}
+            \Let{l}{if(i == 0) inLayer(inLayer.size) else inLayer(i)}
+            \Let{c}{inLayer(i)}
+            \Let{r}{if(i == inLayer.size) inLayer(0) else inLayer(i)}
+
+            \If{l == 0 \And{} c == 0 \And{} r == 0} \Return 0
+            \ElsIf{l == 0 \And{} c == 0 \And{} r == 1} \Return 1
+            \ElsIf{l == 0 \And{} c == 1 \And{} r == 0} \Return 1
+            \ElsIf{l == 0 \And{} c == 1 \And{} r == 1} \Return 1
+            \ElsIf{l == 1 \And{} c == 0 \And{} r == 0} \Return 0
+            \ElsIf{l == 1 \And{} c == 0 \And{} r == 1} \Return 1
+            \ElsIf{l == 1 \And{} c == 1 \And{} r == 0} \Return 1
+            \ElsIf{l == 1 \And{} c == 1 \And{} r == 1} \Return 0
+            \EndIf
+            \EndFunction
+
+            \State \Return outLayer == inLayer.indices.map(calcBit)
+            \EndFunction
+            \vskip8pt
+        \end{algorithmic}
+    \end{algorithm}
 
     % описание скрипта может быть понадобится в апендиксе
     %    The Ergo scripting language we use treats outputs as the ``boxes'' with the
@@ -247,7 +241,7 @@
     \begin{figure}[h]
         \centering
         \includegraphics[width=\textwidth]{cell_tx.pdf}
-        \caption{Transaction chain following Rule 110. See Eq.~\eqref{eq:script} for the
+        \caption{Transaction chain following Rule 110. See Eq.~\ref{eq:script} for the
             $script$ field description.
         %\vk{This is placeholder now}
         %\dnote{replace R1 with \payload{} and R2 with \script{}, put correct script.
