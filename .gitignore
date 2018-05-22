@@ -1,7 +1,8 @@
 ##PDF 
 rule110.pdf
 rule110Notes.bib
-figures/cell_tx.pdf
+figures/row_tx.pdf
+figures/bit_tx.pdf
 
 *.ipynb_checkpoints*
 *__pycache_*
