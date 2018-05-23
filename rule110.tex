@@ -209,13 +209,13 @@
 
             \Function{\sf calcBit}{$i$}
             \Let{$\ell$}{
-                \IfThenElse{$i==0$} {inLayer[inLayer.size]} {inLayer[$i-1$]}
+                \IfThenElse{$i==0$} {inLayer[inLayer.size$-1$]} {inLayer[$i-1$]}
             }
             %if($i$ == 0) inLayer[inLayer.size] else inLayer[$i-1$]}
             \Let{$c$}{inLayer[$i$]}
             %\Let{$r$}{if($i$ == inLayer.size) inLayer[0] else inLayer[$i+1$]}
             \Let{$r$}{
-                \IfThenElse{$i==inLayer.size$} {inLayer[0]} {inLayer[$i+1$]}
+                \IfThenElse{$i==inLayer.size-1$} {inLayer[0]} {inLayer[$i+1$]}
             }
             \If{   $\ell$ == 0 \And{} c == 0 \And{} r == 0} \Return 0
             \ElsIf{$\ell$ == 0 \And{} c == 0 \And{} r == 1} \Return 1
@@ -242,11 +242,11 @@
 
             \Function{\sf calcBit}{$i$}
             \Let{$\ell$}{
-                \IfThenElse{$i==0$} {inLayer[inLayer.size]} {inLayer[$i-1$]}
+                \IfThenElse{$i==0$} {inLayer[inLayer.size$-1$]} {inLayer[$i-1$]}
             }
             \Let{$c$}{inLayer[$i$]}
             \Let{$r$}{
-                \IfThenElse{$i==inLayer.size$} {inLayer[0]} {inLayer[$i+1$]}
+                \IfThenElse{$i==inLayer.size-1$} {inLayer[0]} {inLayer[$i+1$]}
             }
             \Let{$x$}{4$\ell+$2c$+$r}
             \State
@@ -266,9 +266,9 @@
         \begin{algorithmic}[1]
             \Function{\sf isRule110}{inLayer, outLayer}
             \Function{\sf calcBit}{$i$}
-            \Let{$\ell$}{inLayer[$(i-1)$ \% inLayer.size]}
+            \Let{$\ell$}{inLayer[$(i-1)$ \% (inLayer.size$-1$)]}
             \Let{$c$}{inLayer[$i$]}
-            \Let{$r$}{inLayer[$(i+1)$ \% inLayer.size]}
+            \Let{$r$}{inLayer[$(i+1)$ \% (inLayer.size$-1$)]}
             \Let{$x$}{4\Int($\ell$)$+2$\Int($c$)$+$\Int($r$)}
             \State
             \Return \Not($x == 0$ \Or $x == 4$ \Or $x == 7$)
@@ -286,9 +286,9 @@
         \begin{algorithmic}[1]
             \Function{\sf isRule110}{inLayer, outLayer}
             \Function{\sf calcBit}{$i$}
-            \Let{$\ell$}{inLayer[$(i-1)$\Mod inLayer.size]}
+            \Let{$\ell$}{inLayer[$(i-1)$\Mod inLayer.size$-1$]}
             \Let{$c$}{inLayer[$i$]}
-            \Let{$r$}{inLayer[$(i+1)$\Mod inLayer.size]}
+            \Let{$r$}{inLayer[$(i+1)$\Mod inLayer.size$-1$]}
             \State
             \Return $c$\Xor$r$\Xor$(c$\And$r)$\Xor$(\ell$\And$c$\And$r)$
             \EndFunction
@@ -306,11 +306,11 @@
             \Function{\sf isRule110}{inLayer, outLayer}
             \Function{\sf calcBit}{$i$}
             \Let{$\ell$}{
-                \IfThenElse{$i==0$} {inLayer[inLayer.size]} {inLayer[$i-1$]}
+                \IfThenElse{$i==0$} {inLayer[inLayer.size$-1$]} {inLayer[$i-1$]}
             }
             \Let{$c$}{inLayer[$i$]}
             \Let{$r$}{
-                \IfThenElse{$i==inLayer.size$} {inLayer[0]} {inLayer[$i+1$]}
+                \IfThenElse{$i==inLayer.size-1$} {inLayer[0]} {inLayer[$i+1$]}
             }
             \Let{$x$}{$\ell c r + cr + c + r$}
             \State
