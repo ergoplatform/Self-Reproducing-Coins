@@ -290,7 +290,26 @@
             \Let{$c$}{inLayer[$i$]}
             \Let{$r$}{inLayer[$(i+1)$\Mod inLayer.size]}
             \State
-            \Return $r$\Xor$c$\Xor$(r$\And$c)$\Xor$(\ell$\And$c$\And$r)$
+            \Return $c$\Xor$r$\Xor$(c$\And$r)$\Xor$(\ell$\And$c$\And$r)$
+            \EndFunction
+            \State \Return outLayer == inLayer.indeces.map(calcBit)
+            \EndFunction
+            \vskip8pt
+        \end{algorithmic}
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+        \caption{isRule110 function that checks the correctness of the transformation from
+        inLayer to outLayer}
+        \label{alg:isRule110mod4}
+        \begin{algorithmic}[1]
+            \Function{\sf isRule110}{inLayer, outLayer}
+            \Function{\sf calcBit}{$i$}
+            \Let{$\ell$}{inLayer[$(i-1)$\Mod inLayer.size]}
+            \Let{$c$}{inLayer[$i$]}
+            \Let{$r$}{inLayer[$(i+1)$\Mod inLayer.size]}
+            \State
+            \Return $\ell c r + cr + c + r$ \Mod $2$
             \EndFunction
             \State \Return outLayer == inLayer.indeces.map(calcBit)
             \EndFunction
