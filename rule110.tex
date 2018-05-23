@@ -305,11 +305,16 @@
         \begin{algorithmic}[1]
             \Function{\sf isRule110}{inLayer, outLayer}
             \Function{\sf calcBit}{$i$}
-            \Let{$\ell$}{inLayer[$(i-1)$\Mod inLayer.size]}
+            \Let{$\ell$}{
+                \IfThenElse{$i==0$} {inLayer[inLayer.size]} {inLayer[$i-1$]}
+            }
             \Let{$c$}{inLayer[$i$]}
-            \Let{$r$}{inLayer[$(i+1)$\Mod inLayer.size]}
+            \Let{$r$}{
+                \IfThenElse{$i==inLayer.size$} {inLayer[0]} {inLayer[$i+1$]}
+            }
+            \Let{$x$}{$\ell c r + cr + c + r$}
             \State
-            \Return $\ell c r + cr + c + r$ \Mod $2$
+            \Return \Int($x == 1$ \Or $x == 3$)
             \EndFunction
             \State \Return outLayer == inLayer.indeces.map(calcBit)
             \EndFunction
