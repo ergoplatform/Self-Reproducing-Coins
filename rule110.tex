@@ -14,7 +14,7 @@
 \newcommand{\vk}[1]{\textcolor{blue}{V: {#1}}}
 \newcommand{\payload}{\textit{payload}}
 \newcommand{\script}{\textit{script}}
-\newcommand{\And}{\&\&}
+\newcommand{\And}{and}
 %\newcommand{\And}{\wedge}
 \def\Let#1#2{\State #1 $\gets$ #2}
 
@@ -172,7 +172,7 @@
     script structure:
     \begin{equation}
         \label{eq:script}
-        isRule110(self.\payload{},\, output[0].\payload{}) \wedge \\
+        isRule110(self.\payload{},\, output[0].\payload{})\, \mathrm{\And{}}\, \\
         (self.\script{} == output[0].\script{})
     \end{equation}
     %shown in the Algorithm~\ref{alg:prot}.
@@ -194,24 +194,25 @@
     the language of the Ergo blockchain.
 
     \begin{algorithm}[H]
-        \caption{isRule110 function that checks, that transformation from inLayer to outLayer is correct}
+        \caption{isRule110 function that checks, that transformation from
+        inLayer to outLayer is correct}
         \label{alg:isRule110}
         \begin{algorithmic}[1]
             \Function{\sf isRule110}{$inLayer$, $outLayer$}
 
             \Function{\sf calcBit}{$i$}
-            \Let{l}{if(i == 0) inLayer(inLayer.size) else inLayer(i)}
-            \Let{c}{inLayer(i)}
-            \Let{r}{if(i == inLayer.size) inLayer(0) else inLayer(i)}
+            \Let{$\ell$}{if($i$ == 0) inLayer(inLayer.size) else inLayer($i-1$)}
+            \Let{c}{inLayer($i$)}
+            \Let{r}{if($i$ == inLayer.size) inLayer(0) else inLayer($i+1$)}
 
-            \If{l == 0 \And{} c == 0 \And{} r == 0} \Return 0
-            \ElsIf{l == 0 \And{} c == 0 \And{} r == 1} \Return 1
-            \ElsIf{l == 0 \And{} c == 1 \And{} r == 0} \Return 1
-            \ElsIf{l == 0 \And{} c == 1 \And{} r == 1} \Return 1
-            \ElsIf{l == 1 \And{} c == 0 \And{} r == 0} \Return 0
-            \ElsIf{l == 1 \And{} c == 0 \And{} r == 1} \Return 1
-            \ElsIf{l == 1 \And{} c == 1 \And{} r == 0} \Return 1
-            \ElsIf{l == 1 \And{} c == 1 \And{} r == 1} \Return 0
+            \If{   $\ell$ == 0 \And{} c == 0 \And{} r == 0} \Return 0
+            \ElsIf{$\ell$ == 0 \And{} c == 0 \And{} r == 1} \Return 1
+            \ElsIf{$\ell$ == 0 \And{} c == 1 \And{} r == 0} \Return 1
+            \ElsIf{$\ell$ == 0 \And{} c == 1 \And{} r == 1} \Return 1
+            \ElsIf{$\ell$ == 1 \And{} c == 0 \And{} r == 0} \Return 0
+            \ElsIf{$\ell$ == 1 \And{} c == 0 \And{} r == 1} \Return 1
+            \ElsIf{$\ell$ == 1 \And{} c == 1 \And{} r == 0} \Return 1
+            \ElsIf{$\ell$ == 1 \And{} c == 1 \And{} r == 1} \Return 0
             \EndIf
             \EndFunction
 
