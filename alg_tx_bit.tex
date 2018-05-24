@@ -1,0 +1,69 @@
+The logic of the script is the following: every output in its $payload$
+contains the following data: $val$ --- the value of the corresponding bit;
+$x$ --- bit's column; $y$ --- bit's row; $n$ --- number of columns in the row
+$y$; $mid$ --- the flag explained below. Every transaction except the one
+corresponding to the rightmost bit, creates three
+outputs, which are the replicas of the same cell with the $val$ computed by Rule
+110. Replication is needed in order
+to feed the value to the three cells in the next row. The leftmost transaction
+spends one input, the rightmost transaction spends two inputs, and all the other transactions
+spends three outputs corresponding to the left, middle, and right bits of the
+previos row. So far nothing prevents using 9 outputs of the three neighboring
+transactions to create 9 outputs for three identical cells in the next row. To
+deal with it we introduce flag $mid$, which is $true$ for one of three outputs
+only, stating that only this output must be used as a middle bit for the next
+row.
+
+With this being said, we have the following things to verify in the script:
+correctness of the input $x$, $y$, $mid$, correctness of the output $x$, $y$,
+$mid$, $n$, script replication in the outputs, and compliance of the output $val$
+with the Rule 110.
+\begin{algorithm}[H]
+    \caption{1 TX is 1 bit, expanding grid}
+    \label{alg:txBit}
+    \begin{algorithmic}[1]
+        \Function{\sf calcBit}{$\ell$,$c$,$r$}
+        \State
+        \Return $\ell c r + cr + c + r$ \Mod 2
+        \EndFunction
+        \Function{\sf leftCell}{in,out}
+        \Let{inMidCorrect}{$\neg$in[0].mid}
+        \Let{inX}{in[0].x==in.n$-1$}
+        \Let{inCorrect}{inX $\wedge$ inMidCorrect}
+        \Let{valCorrect}{out[0].val=={\sf calcBit}(0, 0, in[0].val)}
+        \Let{outMidCorrect}{out[0].mid $\wedge$ $\neg$(out[1].mid $\vee$ out[2].mid)}
+        \Let{outPosCorrect}{out[0].x==n $\wedge$ (out[0].y == in[0].y$+1$)}
+        \Let{outCorrect}{outMidCorrect $\wedge$ valCorrect $\wedge$ outPosCorrect $\wedge$ {\sf Replicated}(out)}
+        \State
+        \Return valCorrect $\wedge$ inCorrect $\wedge$ {\sf len}(in)==1 $\wedge$ {\sf len}(out)==3
+        \EndFunction
+        \Function{\sf rightCell}{in,out}
+        \Let{inMidCorrect}{in[0].mid $\wedge$ $\neg$in[1].mid}
+        \Let{inY}{in[0].y==in[1].y}
+        \Let{inX}{(in[0].x==0) $\wedge$ (in[1].x==1)}
+        \Let{inCorrect}{inX $\wedge$ inY $\wedge$ inMidCorrect}
+        \Let{valCorrect}{out[0].val=={\sf calcBit}(in[1].val, in[0].val, 0)}
+        \Let{outMidCorrect}{out[0].mid $\wedge$ $\neg$out[1].mid}
+        \Let{outPosCorrect}{out[0].x==in[0].x $\wedge$ (out[0].y == in[0].y$+1$)}
+        \Let{outCorrect}{outMidCorrect $\wedge$ valCorrect $\wedge$ outPosCorrect $\wedge$ {\sf Replicated}(out)}
+        \State
+        \Return outCorrect $\wedge$ inCorrect $\wedge$ {\sf len}(in)==2 $\wedge$ {\sf len}(out)==2
+        \EndFunction
+        \Function{\sf middleCell}{in,out}
+        \Let{inMidCorrect}{in[0].mid $\wedge$ $\neg$(in[1].mid $\vee$ in[2].mid)}
+        \Let{inY}{in[0].y==in[1].y $\wedge$ in[0].y==in[2].y}
+        \Let{inX}{(in[0].x==in[1].x$+1$) $\wedge$ (in[0].x==in[2].x$-1$)}
+        \Let{inCorrect}{inX $\wedge$ inY $\wedge$ inMidCorrect}
+        \Let{valCorrect}{out[0].val=={\sf calcBit}(in[1].val, in[0].val, in[2].val)}
+        \Let{outMidCorrect}{out[0].mid $\wedge$ $\neg$(out[1].mid $\vee$ out[2].mid)}
+        \Let{outPosCorrect}{out[0].x==in[0].x $\wedge$ (out[0].y == in[0].y$+1$)}
+        \Let{outCorrect}{outMidCorrect $\wedge$ valCorrect $\wedge$ outPosCorrect $\wedge$ {\sf Replicated}(out)}
+        \State
+        \Return outCorrect $\wedge$ inCorrect $\wedge$ {\sf len}(in)==3 $\wedge$ {\sf len}(out)==3
+        \EndFunction
+        \State
+        \Return (leftCell(in,out) $\vee$ middleCell(in,out) $\vee$
+        rightCell(in,out)) $\wedge$ out[0].n==in[0].n$+1$
+        \vskip8pt
+    \end{algorithmic}
+\end{algorithm}
