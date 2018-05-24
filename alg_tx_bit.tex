@@ -24,23 +24,24 @@
         \State
         \Return $\ell c r + cr + c + r$ \Mod 2
         \EndFunction
-        \Function{properlyReplicated}{out}
+        \Function{outCorrect}{out, script}
+        \Comment{out structure check}
+        \Let{scriptCorrect}{out[0].script = script}
         \Let{isCopy1}{out[1] = out[0].copy(mid$\leftarrow true$)}
         \Let{isCopy2}{out[2] = out[0].copy(mid$\leftarrow false$)}
         \State
-        \Return ($\neg$out[0].mid) $\wedge$ isCopy1 $\wedge$ isCopy2
+        \Return ($\neg$out[0].mid) $\wedge$ scriptCorrect $\wedge$ isCopy1 $\wedge$ isCopy2
         \EndFunction
         \Function{correctPayload}{in, out}
+        \Comment{out payload check}
         \Let{inMidCorrect}{in[1].mid $\wedge$ $\neg$(in[0].mid $\vee$ in[2].mid)}
         \Let{inYCorrect}{(in[0].n = in[1].n) $\wedge$ (in[0].n = in[2].n)}
         \Let{inXCorrect}{(in[1].x = in[0].x$+1$) $\wedge$ (in[1].x = in[2].x$-1$)}
-        \Let{inCorrect}{inXCorrect $\wedge$ inYCorrect $\wedge$ inMidCorrect}
-        \Let{valCorrect}{out[0].val=\Call{calcBit}{in[1].val, in[0].val, in[2].val}}
+        \Let{inValCorrect}{out[0].val=\Call{calcBit}{in[1].val, in[0].val, in[2].val}}
         \Let{outPosCorrect}{out[0].x = in[0].x $\wedge$ (out[0].n = in[0].n$+1$)}
-        \Let{outCorrect}{valCorrect $\wedge$ outPosCorrect $\wedge$
-        \Call{properlyReplicated}{out}}
         \State
-        \Return outCorrect $\wedge$ inCorrect $\wedge$ in.size=3 $\wedge$ out.size=3
+        \Return inValCorrect  $\wedge$ inXCorrect $\wedge$ inYCorrect $\wedge$ inMidCorrect
+        $\wedge$ outPosCorrect $\wedge$ in.size=out.size=3
         \EndFunction
 %        \If{in[0].x=n $\wedge$ in.size=1}
 %        \Let{middle}{in[0].copy(x$\leftarrow$n$-1$, val$\leftarrow$0, mid$\leftarrow true$)}
@@ -59,8 +60,7 @@
         realIn = in
         \EndIf
         \State
-        \Return \Call{correctPayload}{realIn, out} $\wedge$
-        out[0].script=in[0].script
+        \Return \Call{correctPayload}{realIn, out} $\wedge$ \Call{outCorrect}{out, in[0].script}
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
