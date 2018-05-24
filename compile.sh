@@ -5,6 +5,7 @@ rm rule110.log
 rm rule110.bbl
 rm rule110.blg
 pdflatex figures/bit_tx
+pdflatex figures/bit_tx_greedy
 pdflatex figures/row_tx
 pdflatex rule110
 bibtex rule110
