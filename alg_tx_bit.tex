@@ -42,16 +42,19 @@
         \State
         \Return outCorrect $\wedge$ inCorrect $\wedge$ in.size=3 $\wedge$ out.size=3
         \EndFunction
-        \If{in[0].x=n $\wedge$ in.size=1}
-        \Let{middle}{in[0].copy(x$\leftarrow$n$-1$, val$\leftarrow$0, mid$\leftarrow true$)}
-        \Let{left}{in[0].copy(x$\leftarrow$n$-2$, val$\leftarrow$0, mid$\leftarrow false$)}
-        \State
-        realIn = left ++ middle ++ in
-        \ElsIf{in[0].x=n $\wedge$ in.size=2}
+%        \If{in[0].x=n $\wedge$ in.size=1}
+%        \Let{middle}{in[0].copy(x$\leftarrow$n$-1$, val$\leftarrow$0, mid$\leftarrow true$)}
+%        \Let{left}{in[0].copy(x$\leftarrow$n$-2$, val$\leftarrow$0, mid$\leftarrow false$)}
+%        \State
+%        realIn = left ++ middle ++ in
+%        \ElsIf{in[0].x=n $\wedge$ in.size=2}
+        \If{in[0].x=n $\wedge$ in.size=2}
+        \Comment{left bound - add zero cell at left}
         \Let{left}{in[0].copy(x$\leftarrow$n$-1$, val$\leftarrow$0, mid$\leftarrow false$)}
         \State
         realIn = left ++ in
         \Else
+        \Comment{normal cell}
         \State
         realIn = in
         \EndIf
