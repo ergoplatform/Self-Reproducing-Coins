@@ -96,21 +96,24 @@
     %    \end{algorithmic}
     %\end{algorithm}
 
-    \begin{algorithm}[H]
-        \caption{isRule110 function that checks the correctness of the transformation from
-        inLayer to outLayer}
-        \label{alg:isRule110}
-        \begin{algorithmic}[1]
-            \Function{\sf isRule110}{inLayer, outLayer}
-            \Function{\sf calcBit}{$i$}
-            \Let{$\ell$}{inLayer[$i-1$ \Mod inLayer.size]}
-            \Let{$c$}{inLayer[$i$]}
-            \Let{$r$}{inLayer[$i+1$ \Mod inLayer.size]}
-            \State
-            \Return $\ell c r + cr + c + r$ \Mod 2
-            \EndFunction
-            \State \Return outLayer == inLayer.indeces.map(calcBit)
-            \EndFunction
-            \vskip8pt
-        \end{algorithmic}
-    \end{algorithm}
+\begin{algorithm}[H]
+\caption{[Description]}
+\label{alg:isRule110}
+\begin{algorithmic}[1]
+    \Function{validate}{in, out}
+    \Function{isRule110}{inLayer, outLayer}
+    \Function{calcBit}{$i$}
+    \Let{$\ell$}{inLayer[$i-1$ mod inLayer.size]}
+    \Let{$c$}{inLayer[$i$]}
+    \Let{$r$}{inLayer[$i+1$ mod inLayer.size]}
+    \State
+    \Return $\ell c r + cr + c + r$ \Mod 2
+    \EndFunction
+    \State \Return outLayer == inLayer.indeces.map(\textsc{calcBit})
+    \EndFunction
+    \State
+    \Return \Call{isRule110}{in[0].payload, out[0].payload}
+    $\wedge$ (in[0].script = out[0].script)
+    \EndFunction
+\end{algorithmic}
+\end{algorithm}

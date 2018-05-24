@@ -159,30 +159,32 @@
         \end{tabular}
     \end{table}
 
-    For the description of Rule 110 implementation in a blockchain, we use Bitcoin--like
-    transactions consisting of inputs and outputs. Every output consists of a protecting \script{}
-    and a \payload{} while input is a reference to an output from a previous transaction.
-    We will assume that the current state of the automaton is stored in the transaction output's \payload{}.
-    The general idea is to use the next transaction as a single
-    step of the system evolution. In order to achieve this, two main conditions must
-    be satisfied. First, the \payload{} of at least one newly generated output should contain
-    the updated state of the automaton. Second, this output must contain
-    exactly the same script. These conditions require the transaction input to
-    have access to the output's \script{}s and \payload{}s. It is implicitly
-    present in the vast amount of existing blockchains, since in most cases
-    scripts verify the signature of the spending transaction, which is
-    constructed over the byte array containing the new outputs. However,
-    this way of access to an output's data may be hardly exploitable. In this
-    section we assume, that spending script has a direct access to the
+    For the description of Rule 110 implementation in a blockchain, we use
+    Bitcoin--like transactions consisting of inputs and outputs. Every output
+    consists of a protecting \script{} and a \payload{} while input is a
+    reference to an output from a previous transaction.  We will assume that the
+    current state of the automaton is stored in the transaction output's
+    \payload{}.  The general idea is to use the next transaction as a single
+    step of the system evolution. In order to achieve this, two main conditions
+    must be satisfied. First, the \payload{} of at least one newly generated
+    output should contain the updated state of the automaton. Second, this
+    output must contain exactly the same script. These conditions require the
+    transaction input to have access to the output's \script{}s and \payload{}s.
+    It is implicitly present in the vast amount of existing blockchains, since
+    in most cases scripts verify the signature of the spending transaction,
+    which is constructed over the byte array containing the new outputs.
+    However, this way of access to an output's data may be hardly exploitable.
+    In this section we assume, that spending script has a direct access to the
     outputs.
 
     Keeping all these in mind, we come to the following validation
     script structure:
-    \begin{equation}
-        \label{eq:script}
-        isRule110(self.\payload{},\, output[0].\payload{})\, \And\, \\
-        (self.\script{} == output[0].\script{})
-    \end{equation}
+    \input{alg_tx_row.tex}
+    %\begin{equation}
+    %    \label{eq:script}
+    %    isRule110(self.\payload{},\, output[0].\payload{})\, \And\, \\
+    %    (self.\script{} == output[0].\script{})
+    %\end{equation}
     %shown in the Algorithm~\ref{alg:prot}.
     %\begin{algorithm}[H]
     %    \caption{Output protecting \script{}}
@@ -196,11 +198,9 @@
     %    \end{algorithmic}
     %\end{algorithm}
     The function $isRule110$ returns $true$ if and only if the second argument
-    is the one step Rule 110 transformation of the first argument.
-    Pseudocode algorithm of this check is shown at Alg. \ref{alg:isRule110}, in
+    is the one step Rule 110 transformation of the first argument.  In
     \nameref{appendix1} we provide the full script implementing the rule 110 in
-    the language of the Ergo blockchain.
-    \input{alg_tx_row.tex}
+    the language of the Ergo blockchain.  
     % описание скрипта может быть понадобится в апендиксе
     %    The Ergo scripting language we use treats outputs as the ``boxes'' with the
     %    registers. The validation script has access to the new output registers, and
@@ -220,32 +220,31 @@
 
     \begin{figure}[h]
         \centering
-        \includegraphics[width=\textwidth]{row_tx.pdf}
-        \caption{Transaction chain following Rule 110. See Eq.~\ref{eq:script} for the
+        \includegraphics[width=.8\textwidth]{row_tx.pdf}
+        \caption{Transaction chain following Rule 110. See
+            Alg.~\ref{alg:isRule110} for the
             $script$ field description.
-        %\vk{This is placeholder now}
-        %\dnote{replace R1 with \payload{} and R2 with \script{}, put correct script.
-        %Create links from transaction payload to concrete line in final picture.
-        %Reduce number of cells in one line. Transactions from top to bottom}
         \label{fig:txs} }
     \end{figure}
-
-    Potentially infinite number of sequential transactions in the
-    blockchain leads to the potentially infinite evolution of cellular
-    automaton which is necessary for Turing--complete systems.
-    However, there is one pitfall left.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=.8\textwidth]{bit_tx_greedy.pdf}
+        \caption{[Description]
+        \label{fig:bit_txs} }
+    \end{figure}
+    Potentially infinite number of sequential transactions in the blockchain
+    leads to the potentially infinite evolution of cellular automaton which is
+    necessary for Turing--complete systems.  However, there is one pitfall left.
     The size of the data stored in the output must be limited from above, since
-    the general blockchain rules~\cite{garay2015bitcoin} require the transaction validation
-    time to be bound from above in order to satisfy the
-    chain growth property. The workaround is to split
-    the automaton state between transactions once it becomes too large. As an
-    extreme case one can make a transaction output play a role of a single bit
-    of the automaton. While being inefficient this implementation keeps
-    the logic simple and complies with the requirements of the blockchain and
-    of potentially infinite evolution in space and time. Particular script
-    implementation of this logic is provided in \nameref{appendix1}.
-
-    \dnote{would like to see image here similar to \ref{fig:txs}}
+    the general blockchain rules~\cite{garay2015bitcoin} require the transaction
+    validation time to be bound from above in order to satisfy the chain growth
+    property. The workaround is to split the automaton state between
+    transactions once it becomes too large. As an extreme case one can make a
+    transaction output play a role of a single bit of the automaton. While being
+    inefficient this implementation keeps the logic simple and complies with the
+    requirements of the blockchain and of potentially infinite evolution in
+    space and time. Particular implementation of this logic is provided in
+    \nameref{appendix1}.
 
     Since the Turing--completeness of the Rule 110 was proven
     in~\cite{cook2004universality}, we conclude that even though the scripting
@@ -300,6 +299,7 @@
     \section{Appendix~1}
     \label{appendix1}
     %    Код правила 110 на Эрго языке ( и ссылка на гитхаб)
+    \input{alg_tx_bit.tex}
 
     \section{Appendix~2}
     \label{appendix2}
