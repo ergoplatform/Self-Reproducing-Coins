@@ -81,37 +81,36 @@
     the essence of so--called smart contracts. In the case of Bitcoin this logic
     is implemented in the special purpose Script language, which is believed not
     to be Turing complete. This belief stimulated development of another smart
-    contract platforms with the emphasis on the language
-    universality. Particularly, in Ethereum~\cite{buterin2014next} the $jump$ opcode was introduced
-    in the transaction scripting language in order to incorporate
+    contract platforms with the emphasis on the language universality.
+    Particularly, in Ethereum~\cite{buterin2014next} the $jump$ opcode was
+    introduced in the transaction scripting language in order to incorporate
     unlimited loops. However Turing--completeness of this system is still a
-    subject of debates mostly due to the halt problem undecidability.
-    For example, in~\cite{miller2016ethereum} it was pointed
-    that Turing--complete languages are fundamentally inappropriate for writing
-    smart contracts as soon as their execution is halted after some bounded time.
-    \dnote{Listen to Andrew video to ensure, he was serious here}
+    subject of debates mostly due to the halt problem undecidability.  For
+    example, in~\cite{miller2016ethereum} it was pointed that Turing--complete
+    languages are fundamentally inappropriate for writing smart contracts as
+    soon as their execution is halted after some bounded time.  \dnote{Listen to
+    Andrew video to ensure, he was serious here}
 %    Their approach, while being successful in general, exposed few
 %    significant complications both from formal and security
 %    sides~\cite{atzei2017survey,momot2016seven}.
 
-    Turing complete programming language is the language which admits description
-    of the universal Turing machine. The universal Turing machine is the Turing
-    machine which can simulate any other Turing machine; its existence is one of
-    the main results of the Turing theory~\cite{turing1937computable}. The study
-    of Turing machines is strongly motivated by the Church--Turing thesis, which
-    states that Turing machines are capable of universal computation. This
-    thesis is often viewed at as a definition of computation and
-    computability~\cite{turing1939systems}. The set of known
-    computation devices and models was rapidly growing during the twentieth
-    century, and the methods of their analysis were improved as well. The
-    usual way of proving the Turing completeness of a system of rules, device or
-    the language is using it to emulate the system that is already proven to be
-    Turing complete.
-    The system extensively used in our work is one--dimensional
-    cellular automaton called Rule 110. It was conjectured to be Turing complete
-    by S.~Wolfram~\cite{wolfram1986theory}. The conjecture was proven by
-    M.~Cook~\cite{cook2004universality} based on the previous works by
-    E.~L.~Post~\cite{post1943formal}.
+    Turing complete programming language is the language which admits
+    description of the universal Turing machine. The universal Turing machine is
+    the Turing machine which can simulate any other Turing machine; its
+    existence is one of the main results of the Turing
+    theory~\cite{turing1937computable}. The study of Turing machines is strongly
+    motivated by the Church--Turing thesis, which states that Turing machines
+    are capable of universal computation. This thesis is often viewed at as a
+    definition of computation and computability~\cite{turing1939systems}. The
+    set of known computation devices and models was rapidly growing during the
+    twentieth century, and the methods of their analysis were improved as well.
+    The usual way of proving the Turing completeness of a system of rules,
+    device or the language is using it to emulate the system that is already
+    proven to be Turing complete.  The system extensively used in our work is
+    one--dimensional cellular automaton called Rule 110. It was conjectured to
+    be Turing complete by S.~Wolfram~\cite{wolfram1986theory}. The conjecture
+    was proven by M.~Cook~\cite{cook2004universality} based on the previous
+    works by E.~L.~Post~\cite{post1943formal}.
 
     The utter internal simplicity of Rule 110 makes it an appealing system for
     the proofs of Turing completeness. In the present work we prove Turing
@@ -125,16 +124,17 @@
     underlying idea of complexity growth is similar to one expressed
     in~\cite{von1951general}.
 
-    The paper is structured as follows: in Section \ref{section2} we first describe the naive
-    implementation of Rule 110 using simple Bitcoin--like scripting language.
-    Then we discuss the pitfalls arising from compliance with the blockchain
-    properties, and show the way to overcome them without language modification.
-    Section \ref{section3} contains the discussion of the implementation, language
-    requirements, and usability of the method for the real--world blockchain
-    applications. \nameref{appendix1} contains the Rule 110 implementations with smart
-    contract languages of existing blockchain platforms. \nameref{appendix2} sketches
-    the discussion on the nature of computation in the framework of blockchain
-    scripting and validation rules.
+    The paper is structured as follows: in Section \ref{section2} we first
+    describe the naive implementation of Rule 110 using simple Bitcoin--like
+    scripting language.  Then we discuss the pitfalls arising from compliance
+    with the blockchain properties, and show the way to overcome them without
+    language modification.  Section \ref{section3} contains the discussion of
+    the implementation, language requirements, and usability of the method for
+    the real--world blockchain applications. \nameref{appendix1} contains the
+    Rule 110 implementations with smart contract languages of existing
+    blockchain platforms. \nameref{appendix2} sketches the discussion on the
+    nature of computation in the framework of blockchain scripting and
+    validation rules.
 
     \section{Rule 110 implementation}
     \label{section2}
@@ -144,22 +144,24 @@
     %    В блокчейне необходимо иметь константное время валидации для выполнения свойства chain growth (GKL). Для Тьюринг полноты нужно уметь работать со строками произвольного размера, чтобы их валидацуия выполнялась за конечное время, из нужно разбивать на подстроки, крайний случай - 1 бит на выход. (ссылка на код либо в аппендикс, либо на гитхаб)
     Cellular automaton we construct is known as Rule 110.
     It is a one--dimensional string of 0s and 1s together with evolution rules.
-    The one step evolution of the bit is defined by its value together with the
-    values of the two neighboring bits with the rules shown in the Table
-    \ref{tab:transitions}.
-    \begin{table}
-        \caption{Transition rules for the Rule 110 automaton}
-        \label{tab:transitions}
-        \centering
-        \begin{tabular} {| *{9}{c|} }
-            \hline
-            Current state & 000 & 001 & 010 & 011 & 100 & 101 & 110 & 111 \\ \hline
-            Next middle bit & 0 & 1 & 1 & 1 & 0 & 1 & 1 & 0 \\
-            \hline
-        \end{tabular}
-    \end{table}
+    The one step evolution of the bit is defined by its value $c$ together with the
+    values of the two neighboring bits --- left $\ell$ and right $r$ with the
+    transition rule defined in Alg.~\ref{alg:calc_bit}
+    \input{alg_calc_bit.tex}
+    %\ref{tab:transitions}.
+    %\begin{table}
+    %    \caption{Transition rules for the Rule 110 automaton}
+    %    \label{tab:transitions}
+    %    \centering
+    %    \begin{tabular} {| *{9}{c|} }
+    %        \hline
+    %        Current state & 000 & 001 & 010 & 011 & 100 & 101 & 110 & 111 \\ \hline
+    %        Next middle bit & 0 & 1 & 1 & 1 & 0 & 1 & 1 & 0 \\
+    %        \hline
+    %    \end{tabular}
+    %\end{table}
 
-    For the description of Rule 110 implementation in a blockchain, we use
+    For the automaton implementation in a blockchain we use
     Bitcoin--like transactions consisting of inputs and outputs. Every output
     consists of a protecting \script{} and a \payload{} while input is a
     reference to an output from a previous transaction.  We will assume that the
@@ -180,42 +182,14 @@
     Keeping all these in mind, we come to the following validation
     script structure:
     \input{alg_tx_row.tex}
-    %\begin{equation}
-    %    \label{eq:script}
-    %    isRule110(self.\payload{},\, output[0].\payload{})\, \And\, \\
-    %    (self.\script{} == output[0].\script{})
-    %\end{equation}
-    %shown in the Algorithm~\ref{alg:prot}.
-    %\begin{algorithm}[H]
-    %    \caption{Output protecting \script{}}
-    %    \label{alg:prot}
-    %    \begin{algorithmic}[1]
-    %        %\State isRule110Transformation(self.\payload{}, output(0).\payload{}) \And{}
-    %        %\State self.\script{} == output(0).\script{}
-    %        \State $isRule110(self.\payload{}, output[0].\payload{}) \And{}
-    %        (self.\script{} ==  output[0].\script{})$
-    %        \vskip8pt
-    %    \end{algorithmic}
-    %\end{algorithm}
-    The function $isRule110$ returns $true$ if and only if the second argument
-    is the one step Rule 110 transformation of the first argument.  In
-    \nameref{appendix1} we provide the full script implementing the rule 110 in
-    the language of the Ergo blockchain.  
-    % описание скрипта может быть понадобится в апендиксе
-    %    The Ergo scripting language we use treats outputs as the ``boxes'' with the
-    %    registers. The validation script has access to the new output registers, and
-    %    resides in a separate register itself. It supports byte arrays, logical
-    %    operations AND and OR, integer arithmetics, comparison, and sigma protocols
-    %    for zero knowledge proofs with native support of AND and OR as basic
-    %    elements. The presence of registers both for constants and the script makes
-    %    it easy to verify the persistence of the script. Logical operations and
-    %    collections, in turn, allow verification correctness of the automaton
-    %    transition (whose state is being stored in the separate register). The
-    %    schematics of the transactions is presented on Fig.~\ref{fig:txs}.
+    The function \textsc{isRule110} returns $true$ if and only if the second
+    argument is the one step transformation of the first argument.  In
+    \nameref{appendix1} we provide the full implementation of the Rule
+    110 in the language of the Ergo blockchain.  
 
-    With this script constructed, cellular automaton evolution may be started by
+    With this script cellular automaton evolution may be started by
     chaining transactions in a blockchain. Fig.~\ref{fig:txs} shows three
-    transactions (at the left), each one representing the iteration of Rule 110
+    transactions (at the left), each one representing the iteration of the 
     automaton (at the right).
 
     \begin{figure}[h]
@@ -225,12 +199,6 @@
             Alg.~\ref{alg:isRule110} for the
             $script$ field description.
         \label{fig:txs} }
-    \end{figure}
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=.8\textwidth]{bit_tx_greedy.pdf}
-        \caption{[Description]
-        \label{fig:bit_txs} }
     \end{figure}
     Potentially infinite number of sequential transactions in the blockchain
     leads to the potentially infinite evolution of cellular automaton which is
@@ -243,8 +211,19 @@
     transaction output play a role of a single bit of the automaton. While being
     inefficient this implementation keeps the logic simple and complies with the
     requirements of the blockchain and of potentially infinite evolution in
-    space and time. Particular implementation of this logic is provided in
-    \nameref{appendix1}.
+    space and time. The pseudocode implementation of the corresponding script is
+    provided in the Alg.~\ref{alg:txBit}, and the evolution is schematically shown
+    on Fig.~\ref{fig:bit_txs}.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=.8\textwidth]{bit_tx_greedy.pdf}
+        \caption{Evolution of the cellular automaton described in
+            Alg.~\ref{alg:txBit}. Every non--boundary transaction spends three
+            outputs, and generates three new ones with identcal bit values.
+            Hatching indicates ``mid'' flag being set to $false$.
+        \label{fig:bit_txs} }
+    \end{figure}
+    \input{alg_tx_bit.tex}
 
     Since the Turing--completeness of the Rule 110 was proven
     in~\cite{cook2004universality}, we conclude that even though the scripting
@@ -295,12 +274,21 @@
     to Appendix~2.
 
     \bibliography{sources}
-
     \section{Appendix~1}
     \label{appendix1}
     %    Код правила 110 на Эрго языке ( и ссылка на гитхаб)
-    \input{alg_tx_bit.tex}
 
+    % описание скрипта может быть понадобится в апендиксе
+    %    The Ergo scripting language we use treats outputs as the ``boxes'' with the
+    %    registers. The validation script has access to the new output registers, and
+    %    resides in a separate register itself. It supports byte arrays, logical
+    %    operations AND and OR, integer arithmetics, comparison, and sigma protocols
+    %    for zero knowledge proofs with native support of AND and OR as basic
+    %    elements. The presence of registers both for constants and the script makes
+    %    it easy to verify the persistence of the script. Logical operations and
+    %    collections, in turn, allow verification correctness of the automaton
+    %    transition (whose state is being stored in the separate register). The
+    %    schematics of the transactions is presented on Fig.~\ref{fig:txs}.
     \section{Appendix~2}
     \label{appendix2}
 

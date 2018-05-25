@@ -102,14 +102,14 @@
 \begin{algorithmic}[1]
     \Function{validate}{in, out}
     \Function{isRule110}{inLayer, outLayer}
-    \Function{calcBit}{$i$}
+    \Function{procCell}{$i$}
     \Let{$\ell$}{inLayer[$i-1$ mod inLayer.size]}
     \Let{$c$}{inLayer[$i$]}
     \Let{$r$}{inLayer[$i+1$ mod inLayer.size]}
     \State
-    \Return $\ell c r + cr + c + r$ \Mod 2
+    \Return \Call{calcBit}{$\ell$, $c$, $r$}
     \EndFunction
-    \State \Return outLayer == inLayer.indeces.map(\textsc{calcBit})
+    \State \Return outLayer == inLayer.indeces.map(\textsc{procCell})
     \EndFunction
     \State
     \Return \Call{isRule110}{in[0].payload, out[0].payload}

@@ -1,31 +1,10 @@
-%The logic of the script is the following: every output in its $payload$
-%contains the following data: $val$ --- the value of the corresponding bit;
-%$x$ --- bit's column; $n$ --- number of columns in the current row; 
-%$mid$ --- the flag explained below. Every transaction creates three
-%outputs, which are the replicas of the same cell with the $val$ computed by Rule
-%110. Replication is needed in order
-%to feed the value to the three cells in the next row. The leftmost cell emulates
-%the virtual zero input. So far nothing prevents using 9 outputs of the three neighboring
-%transactions to create 9 outputs for three identical cells in the next row. To
-%deal with it we introduce flag $mid$, which is $true$ for one of three outputs
-%only, stating that only this output must be used as a middle bit for the next
-%row.
-%
-%With this being said, we have the following things to verify in the script:
-%correctness of the input $x$, $y$, $mid$, correctness of the output $x$, $y$,
-%$mid$, $n$, script replication in the outputs, and compliance of the output $val$
-%with the Rule 110.
 \begin{algorithm}[H]
-    \caption{[Description]}
+    \caption{Validation script for the case of single output representing the single bit}
     \label{alg:txBit}
     \begin{algorithmic}[1]
         \Function{verify}{in, out}\Comment{``in'' and ``out'' are lists of inputs and outputs}
-        \Function{calcBit}{$\ell$, $c$, $r$}
-        \State
-        \Return $\ell c r + cr + c + r$ \Mod 2
-        \EndFunction
         \Function{outCorrect}{out, script}
-        \Comment{out structure check}
+        \Comment{output structure check}
         \Let{scriptCorrect}{out[0].script = script}
         \Let{isCopy1}{out[1] = out[0].copy(mid$\leftarrow true$)}
         \Let{isCopy2}{out[2] = out[0].copy(mid$\leftarrow false$)}
@@ -33,27 +12,37 @@
         \Return ($\neg$out[0].mid) $\wedge$ scriptCorrect $\wedge$ isCopy1 $\wedge$ isCopy2
         \EndFunction
         \Function{correctPayload}{in, out}
-        \Comment{out payload check}
+        \Comment{output payload check}
+        \State \(\triangleright\) mid flag is only set for the middle input
         \Let{inMidCorrect}{in[1].mid $\wedge$ $\neg$(in[0].mid $\vee$ in[2].mid)}
+        \State \(\triangleright\) input positions are correct 
         \Let{inYCorrect}{(in[0].n = in[1].n) $\wedge$ (in[0].n = in[2].n)}
         \Let{inXCorrect}{(in[1].x = in[0].x$+1$) $\wedge$ (in[1].x = in[2].x$-1$)}
+        \State \(\triangleright\) bits satisfy Rule 110
         \Let{inValCorrect}{out[0].val=\Call{calcBit}{in[1].val, in[0].val, in[2].val}}
-        \Let{outPosCorrect}{out[0].x = in[0].x $\wedge$ (out[0].n = in[0].n$+1$)}
+        \State \(\triangleright\) output position matches the input one
+        \Let{outPosCorrect}{out[0].x = in[1].x $\wedge$ (out[0].n = in[0].n$-1$)}
         \State
-        \Return inValCorrect  $\wedge$ inXCorrect $\wedge$ inYCorrect $\wedge$ inMidCorrect
-        $\wedge$ outPosCorrect $\wedge$ in.size=out.size=3
+        \Return inValCorrect  $\wedge$ inXCorrect $\wedge$ inYCorrect $\wedge$ 
+        \par  \hskip\algorithmicindent \hskip\algorithmicindent
+       inMidCorrect $\wedge$ outPosCorrect $\wedge$ in.size=out.size=3
         \EndFunction
-%        \If{in[0].x=n $\wedge$ in.size=1}
-%        \Let{middle}{in[0].copy(x$\leftarrow$n$-1$, val$\leftarrow$0, mid$\leftarrow true$)}
-%        \Let{left}{in[0].copy(x$\leftarrow$n$-2$, val$\leftarrow$0, mid$\leftarrow false$)}
-%        \State
-%        realIn = left ++ middle ++ in
-%        \ElsIf{in[0].x=n $\wedge$ in.size=2}
-        \If{in[0].x=n $\wedge$ in.size=2}
-        \Comment{left bound - add zero cell at left}
+        \If{in[0].x=n $\wedge$ in.size=1}
+        \Comment{leftmost --- add 2 zeroes to the left}
+        \Let{middle}{in[0].copy(x$\leftarrow$n$-1$, val$\leftarrow$0, mid$\leftarrow true$)}
+        \Let{left}{in[0].copy(x$\leftarrow$n$-2$, val$\leftarrow$0, mid$\leftarrow false$)}
+        \State
+        realIn = left ++ middle ++ in
+        \ElsIf{in[0].x=n $\wedge$ in.size=2}
+        \Comment{next to leftmost --- add zero to the left}
         \Let{left}{in[0].copy(x$\leftarrow$n$-1$, val$\leftarrow$0, mid$\leftarrow false$)}
         \State
         realIn = left ++ in
+        \ElsIf{in[0].x=$-1$ $\wedge$ in.size=2}
+        \Comment{rightmost --- add zero to the right}
+        \Let{right}{in[0].copy(x$\leftarrow 1$, val$\leftarrow$0, mid$\leftarrow false$)}
+        \State
+        realIn = in ++ right
         \Else
         \Comment{normal cell}
         \State
