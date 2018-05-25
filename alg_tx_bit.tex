@@ -1,5 +1,6 @@
 \begin{algorithm}[H]
-    \caption{Validation script for the case of single output representing the single bit}
+    \caption{Validation script for the output representing the single bit, and
+    the unbound grid}
     \label{alg:txBit}
     \begin{algorithmic}[1]
         \Function{verify}{in, out}\Comment{``in'' and ``out'' are lists of inputs and outputs}
@@ -15,7 +16,7 @@
         \Comment{output payload check}
         \State \(\triangleright\) mid flag is only set for the middle input
         \Let{inMidCorrect}{in[1].mid $\wedge$ $\neg$(in[0].mid $\vee$ in[2].mid)}
-        \State \(\triangleright\) input positions are correct 
+        \State \(\triangleright\) input positions are correct; n is the index of leftmost column
         \Let{inYCorrect}{(in[0].n = in[1].n) $\wedge$ (in[0].n = in[2].n)}
         \Let{inXCorrect}{(in[1].x = in[0].x$+1$) $\wedge$ (in[1].x = in[2].x$-1$)}
         \State \(\triangleright\) bits satisfy Rule 110

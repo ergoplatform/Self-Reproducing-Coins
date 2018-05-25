@@ -220,7 +220,7 @@
         \caption{Evolution of the cellular automaton described in
             Alg.~\ref{alg:txBit}. Every non--boundary transaction spends three
             outputs, and generates three new ones with identcal bit values.
-            Hatching indicates ``mid'' flag being set to $false$.
+            Hatching indicates ``mid'' flag being unset.
         \label{fig:bit_txs} }
     \end{figure}
     \input{alg_tx_bit.tex}
@@ -245,10 +245,10 @@
     recursion. By doing this we let the program be executed over the set of
     transactions and blocks. This, in turn helped us to pass around the halting
     problem, which used to make arbitrary script execution impossible inside a
-    transaction in the view of chain growth property. Roughly speaking, single
-    transaction in our approach corresponds to a single cycle of the computation
-    machine. The trade--off is again between the consumed space and execution time:
-    one can either incorporate complex logic in the script, and expect
+    transaction in the view of chain growth property. In our approach single
+    transaction approximately corresponds to a single cycle of the computation
+    machine. The trade--off is again between the consumed space and execution
+    time: one can either incorporate complex logic in the script, and expect
     relatively fast execution, or leave the script logic short and simple, but
     the execution can consume more transactions.
 
