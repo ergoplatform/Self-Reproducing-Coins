@@ -47,22 +47,19 @@
         % выходным и входным состояниями транзакции.
         Turing completeness of the smart contract languages in the blockchain
         systems is often associated with the variety of the language features
-        (such as loops) within a context of a single transaction.
+        (such as loops). %within a context of a single transaction%
         A more fundamental problem is combining unpredictability of arbitrary
         script execution time with the blockchain requirements.
-        We show that Turing completeness in blockchain environment can
+        We show that Turing completeness in the blockchain environment can
         be achieved through unwinding the recursive calls between
         multiple transactions and blocks instead of using a single one. We prove
         it constructing the simple universal Turing machine using
         the small set of features of the scripting language in the unspent
         transaction output (UTXO) model, which admits the relations between
         input and output transaction states.
-        Neither \vk{unbound} loops nor infinite validation time is needed in this approach.
-        %\dnote{Don't like `minimalistic`
-        %here, UTXO may be not so cryitical and may be even incorrect if we'll
-    %add waves example} 
-    \keywords{smart contracts, Turing completeness, blockchain, cellular
-    automata}
+        Neither unbound loops nor infinite validation time is needed in this approach.
+
+    \keywords{smart contracts, Turing completeness, blockchain, cellular automata}
     \end{abstract}
 
     \section{Introduction}
@@ -74,7 +71,7 @@
     Blockchain technology has become widely adopted after the introduction of
     Bitcoin by S.~Nakamoto~\cite{nakamoto2008bitcoin}. This peer--to--peer
     electronic cash ledger drew the enormous attention from the public, which
-    resulted in rapid development of the technology, and appearance of hundreds
+    resulted in rapid development of the technology and appearance of hundreds
     of alternative cryptocurrency projects. It also turned out that the
     blockchain applications expand quite far beyond the simple ledger niche. The
     rules of transaction validation can incorporate complicated logic, which is
@@ -122,16 +119,17 @@
     operator, nor recursive calls inside the transaction. Instead, we treat the
     computation as if it is occurring between the transactions (or, maybe
     blocks). In this context transaction chaining and replication furnishes us
-    with potentially infinite loops and recursion, and the union of internal
-    transaction registers yields analog of potentially infinite tape. The
+    with potentially infinite loops and recursion, while the union of outputs
+    inside multiple transactions \dnote{replaced "the union of internal transaction registers"}
+    yields analog of potentially infinite tape. The
     underlying idea of complexity growth is similar to one expressed
     in~\cite{von1951general}.
 
     The paper is structured as follows: in Section \ref{section2} we first
     describe the naive implementation of Rule 110 using simple Bitcoin--like
     scripting language.  Then we discuss the pitfalls arising from compliance
-    with the blockchain properties, and show the way to overcome them without
-    language modification.  Section \ref{section3} contains the discussion of
+    with the blockchain properties, and show the way to overcome them.
+    Section \ref{section3} contains the discussion of
     the implementation, language requirements, and usability of the method for
     the real--world blockchain applications. \nameref{appendix1} sketches the discussion on the
     nature of computation in the framework of blockchain scripting and
