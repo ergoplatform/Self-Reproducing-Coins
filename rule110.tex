@@ -210,9 +210,11 @@
     transaction output play a role of a single bit of the automaton. While being
     inefficient this implementation keeps the logic simple and complies with the
     requirements of the blockchain and of potentially infinite evolution in
-    space and time. The pseudocode implementation of the corresponding script is
+    space and time. The pseudocode of the corresponding script is
     provided in the Alg.~\ref{alg:txBit} and it's implementation in Ergo smart
-    contract language is provided at \cite{ergoScript2}.
+    contract language is provided at \cite{ergoScript2}. Fig.~\ref{fig:bit_txs}
+    schematically shows the sequence of transactions (at left), that corresponds
+    to some area evaluation (at right) of the automation run.
     \begin{figure}[h]
         \centering
         \includegraphics[width=.8\textwidth]{bit_tx_greedy.pdf}

@@ -32,22 +32,18 @@
         \Comment{leftmost --- add 2 zeroes to the left}
         \Let{middle}{in[0].copy(x$\leftarrow$n$-1$, val$\leftarrow$0, mid$\leftarrow true$)}
         \Let{left}{in[0].copy(x$\leftarrow$n$-2$, val$\leftarrow$0, mid$\leftarrow false$)}
-        \State
-        realIn = left ++ middle ++ in
+        \Let{realIn}{left ++ middle ++ in}
         \ElsIf{in[0].x=n $\wedge$ in.size=2}
         \Comment{next to leftmost --- add zero to the left}
         \Let{left}{in[0].copy(x$\leftarrow$n$-1$, val$\leftarrow$0, mid$\leftarrow false$)}
-        \State
-        realIn = left ++ in
+        \Let{realIn}{left ++ in}
         \ElsIf{in[0].x=$-1$ $\wedge$ in.size=2}
         \Comment{rightmost --- add zero to the right}
         \Let{right}{in[0].copy(x$\leftarrow 1$, val$\leftarrow$0, mid$\leftarrow false$)}
-        \State
-        realIn = in ++ right
+        \Let{realIn}{in ++ right}
         \Else
         \Comment{normal cell}
-        \State
-        realIn = in
+        \Let{realIn}{in}
         \EndIf
         \State
         \Return \Call{correctPayload}{realIn, out} $\wedge$ \Call{outCorrect}{out, in[0].script}
