@@ -216,8 +216,8 @@
     space and time. The pseudocode of the corresponding script is
     provided in the Alg.~\ref{alg:txBit} and it's implementation in Ergo smart
     contract language is provided at \cite{ergoScript2}. Fig.~\ref{fig:bit_txs}
-    schematically shows the sequence of transactions (at left), that corresponds
-    to some area evaluation (at right) of the automation run.
+    schematically shows the sequence of transactions (on the left), that corresponds
+    to some area evaluation (on the right) of the automation run.
     \begin{figure}[h]
         \centering
         \includegraphics[width=.8\textwidth]{bit_tx_greedy.pdf}
@@ -225,12 +225,16 @@
             Alg.~\ref{alg:txBit}. Every non--boundary transaction spends three
             outputs, and generates three new ones with identcal bit values.
             Hatching indicates ``mid'' flag being unset.
+			% Тут матрица транзакций транспонирована относительно правой картинки - трудно читать. 
+			% К тому же на картинке выделен блок шириной в 5 клеток, хотя показана эволюция только трех. 
+			% Понятно, что крайние две тоже участвуют в определении состояния, но поначалу сбивает с толку. 
+			% Идеально на клеточках справа проставить номера соответсвующих им транзакций
         \label{fig:bit_txs} }
     \end{figure}
     \input{alg_tx_bit.tex}
 
-    The script works in a following way. Every output contains its bit value $val$,
-    column index $x$, and the length of the grid $n$ at the current step.
+	The script works as follows. Every output contains its bit value $val$, % as follows более употребительный варинант
+    the column index $x$, and the length of the grid $n$ at the current step.
     \dnote{We claimed, that "Every output consists of a protecting \script{} and a
     \payload{}". May be it's better to follow this rules here, e.g. write "Every
     outputs payload contains" use $output.val$, $output.bit$, etc. in a algo} As the
@@ -251,7 +255,7 @@
     in~\cite{cook2004universality}, we conclude that even though the scripting
     language itself does not allow infinite loops, Turing--completeness of the
     system can be achieved by combining multiple transactions together. Note
-    that our language requirements are not very demanding, and can be met in a
+    that our language requirements are not very demanding, and can be met in a % какие именно требования языку - не описано. Может быть это можно формалиовать?
     number of platforms avoiding complicated ad--hoc structures.
 
     \section{Discussion}
@@ -265,9 +269,9 @@
     The most important move in our work was unwinding recursive calls by means
     of transaction chaining, although the language contained neither cycles nor
     recursion. By doing this we let the program be executed over the set of
-    transactions and blocks. This, in turn helped us to pass around the halting
+    transactions and blocks. This in turn helped us to work around the halting
     problem, which used to make arbitrary script execution impossible inside a
-    transaction in the view of chain growth property. In our approach single
+    transaction in the view of the chain growth property. In our approach a single
     transaction approximately corresponds to a single cycle of the computation
     machine. The trade--off is again between the consumed space and execution
     time: one can either incorporate complex logic in the script, and expect
@@ -285,10 +289,10 @@
 
     Blockchain strict upper-bound for transaction validation time makes unbounded
     loops useless in terms of variety of algorithms that may be implemented
-    with concrete smart contract language, however it's absence allows to
+    with concrete smart contract language, however its absence allows to
     estimate script complexity in compile-time and divide algorithm into
-    few transactions if needed. Thus, the hard computation limit per block
-    may be exceeding by chaining multiple transactions between different blocks.
+    a couple of transactions if needed. Thus, the hard computation limit per block % a couple of или multiple
+    may be exceeded by chaining multiple transactions between different blocks. % может быть exceeded->surpassed? Смысл больше в сторону "преодолен", а не "упс, превышен"
 
     As a drawback, one can argue that the set of validation rules is not exactly
     the programming language, since it doesn't prescript the sequence of actions,
