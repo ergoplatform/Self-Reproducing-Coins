@@ -128,9 +128,7 @@
     with the blockchain properties, and show the way to overcome them without
     language modification.  Section \ref{section3} contains the discussion of
     the implementation, language requirements, and usability of the method for
-    the real--world blockchain applications. \nameref{appendix1} contains the
-    Rule 110 implementations with smart contract languages of existing
-    blockchain platforms. \nameref{appendix2} sketches the discussion on the
+    the real--world blockchain applications. \nameref{appendix1} sketches the discussion on the
     nature of computation in the framework of blockchain scripting and
     validation rules.
 
@@ -180,10 +178,11 @@
     Keeping all these in mind, we come to the following validation
     script structure:
     \input{alg_tx_row.tex}
-    The function \textsc{isRule110} returns $true$ if and only if the second
-    argument is the one step transformation of the first argument.  In
-    \nameref{appendix1} we provide the full implementation of the Rule
-    110 in the language of the Ergo blockchain.  
+    This script performs two checks. First, it takes the payload of a current input
+    and ensures, that application of rule 110 to it equals to the payload
+    of the first output. Second, it checks that first output script is the same,
+    as a script of the input. The full implementation of this script in the smart
+    contract language of an existing UTXO blockchain Ergo is provided at \cite{ergoScript1}.
 
     With this script cellular automaton evolution may be started by
     chaining transactions in a blockchain. Fig.~\ref{fig:txs} shows three
@@ -204,14 +203,16 @@
     The size of the data stored in the output must be limited from above, since
     the general blockchain rules~\cite{garay2015bitcoin} require the transaction
     validation time to be bound from above in order to satisfy the chain growth
-    property. The workaround is to split the automaton state between
+    property.
+
+    The workaround is to split the automaton state between
     transactions once it becomes too large. As an extreme case one can make a
     transaction output play a role of a single bit of the automaton. While being
     inefficient this implementation keeps the logic simple and complies with the
     requirements of the blockchain and of potentially infinite evolution in
     space and time. The pseudocode implementation of the corresponding script is
-    provided in the Alg.~\ref{alg:txBit}, and the evolution is schematically shown
-    on Fig.~\ref{fig:bit_txs}.
+    provided in the Alg.~\ref{alg:txBit} and it's implementation in Ergo smart
+    contract language is provided at \cite{ergoScript2}.
     \begin{figure}[h]
         \centering
         \includegraphics[width=.8\textwidth]{bit_tx_greedy.pdf}
@@ -222,6 +223,8 @@
         \label{fig:bit_txs} }
     \end{figure}
     \input{alg_tx_bit.tex}
+
+    This script works as follows: \dnote{Describe script logic, mid flag, boundary conditions}
 
     Since the Turing--completeness of the Rule 110 was proven
     in~\cite{cook2004universality}, we conclude that even though the scripting
@@ -272,22 +275,6 @@
     to Appendix~2.
 
     \bibliography{sources}
-    \section{Appendix~1}
-    \label{appendix1}
-    %    Код правила 110 на Эрго языке ( и ссылка на гитхаб)
-
-    % описание скрипта может быть понадобится в апендиксе
-    %    The Ergo scripting language we use treats outputs as the ``boxes'' with the
-    %    registers. The validation script has access to the new output registers, and
-    %    resides in a separate register itself. It supports byte arrays, logical
-    %    operations AND and OR, integer arithmetics, comparison, and sigma protocols
-    %    for zero knowledge proofs with native support of AND and OR as basic
-    %    elements. The presence of registers both for constants and the script makes
-    %    it easy to verify the persistence of the script. Logical operations and
-    %    collections, in turn, allow verification correctness of the automaton
-    %    transition (whose state is being stored in the separate register). The
-    %    schematics of the transactions is presented on Fig.~\ref{fig:txs}.
-    \section{Appendix~2}
     \label{appendix2}
 
     %    Где же происходят вычисления? ибо мы не задаем алгоритм, а задаем правила верификации. Можно сравнение, что в обычном компьютере движущая сила это электричество.. Оффчейн вычисления - требуем найти корни многочлена, или дискретный логарифм.. Посмотреть на декларативные языки программирования, может какие-нидь клеточные автоматы в экселе. Pay-for-proof contracts из биткоина.

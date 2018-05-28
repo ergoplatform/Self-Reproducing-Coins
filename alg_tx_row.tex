@@ -97,7 +97,8 @@
     %\end{algorithm}
 
 \begin{algorithm}[H]
-\caption{[Description]}
+\caption{Script, that ensures that the transaction performs correct rule 110 transformation
+keeping the same rules for further iterations}
 \label{alg:isRule110}
 \begin{algorithmic}[1]
     \Function{validate}{in, out}
@@ -112,8 +113,8 @@
     \State \Return outLayer == inLayer.indeces.map(\textsc{procCell})
     \EndFunction
     \State
-    \Return \Call{isRule110}{in[0].payload, out[0].payload}
-    $\wedge$ (in[0].script = out[0].script)
+    \Return \Call{isRule110}{self.payload, out[0].payload}
+    $\wedge$ (self.script = out[0].script)
     \EndFunction
 \end{algorithmic}
 \end{algorithm}
