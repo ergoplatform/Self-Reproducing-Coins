@@ -219,11 +219,13 @@
     \end{figure}
     \input{alg_tx_bit.tex}
 
-	The script works as follows. Every output contains its bit value $val$, 
+	The script works as follows. Every output's payload contains its bit value
+    $val$, 
     the column index $x$, and the length of the grid $n$ at the current step.
-    \dnote{We claimed, that "Every output consists of a protecting \script{} and a
-    \payload{}". May be it's better to follow this rules here, e.g. write "Every
-    outputs payload contains" use $output.val$, $output.bit$, etc. in a algo} As the
+    %\dnote{We claimed, that "Every output consists of a protecting \script{} and a
+    %\payload{}". May be it's better to follow this rules here, e.g. write "Every
+    %outputs payload contains" use $output.val$, $output.bit$, etc. in a algo} 
+    As the
     grid expands by one at every step, $n$ also serves as the row number. By
     default, the transaction spends three inputs (corresponding to the three
     neighboring bits from the previous row), and creates three outputs with the same
