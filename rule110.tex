@@ -29,9 +29,11 @@
 \begin{document}
     \title{Self-replicating UTXOs as a universal Turing Machine}
 
-    \author{Anonymous authors}
-    \institute{Anonymous organizations
-    \email{anon@anon.an}}
+\author{Alexander Chepurnoy\inst{1,2}, Vasily Kharin\inst{3}, Dmitry Meshkov\inst{1}}
+
+\institute{Ergo Platform \\\email{catena@protonmail.com} \and
+IOHK Research \\\email{alex.chepurnoy@iohk.io} \and
+Research Institute\\\email{v.kharin@protonmail.com}}
 
     \date{\today}
     \maketitle
@@ -83,9 +85,8 @@
     introduced in the transaction scripting language in order to incorporate
     unlimited loops.  In practice this resulted to various vulnerabilities and
     DoS attacks \cite{atzei2017survey} since transaction computation cost
-    (so-called $gas$) can only be calculated in runtime, making execution time
-    unpredictable. \dnote{some link to gas model problems may be suitable here,
-    e.g. \cite{Earlz2017}} Moreover, Turing-completeness of Ethereum system is
+    (so-called $gas$) can only be calculated in runtime.
+    Moreover, Turing-completeness of Ethereum system is
     still a subject of debates mostly due to undecidability of the halt problem
     in combination with the bounded block validation time. Particularly, the gas
     limit is often viewed at as a fundamental component preventing
@@ -223,9 +224,6 @@
 	The script works as follows. Every output's payload contains its bit value
     $val$, 
     the column index $x$, and the length of the grid $n$ at the current step.
-    %\dnote{We claimed, that "Every output consists of a protecting \script{} and a
-    %\payload{}". May be it's better to follow this rules here, e.g. write "Every
-    %outputs payload contains" use $output.val$, $output.bit$, etc. in a algo} 
     As the
     grid expands by one at every step, $n$ also serves as the row number. By
     default, the transaction spends three inputs (corresponding to the three
@@ -278,10 +276,11 @@
 
     Blockchain strict upper-bound for transaction validation time makes unbounded
     loops useless in terms of variety of algorithms that may be implemented
-    with concrete smart contract language, however its absence allows to
-    estimate script complexity in compile-time and divide algorithm into
-    multiple transactions if needed. Thus, the hard computation limit per block
-    may be surpassed by chaining multiple transactions between different block.
+    inside one transaction.
+    In absence of unbounded loops one can estimate script complexity in compile-time
+    and divide algorithm into multiple transactions if needed. Thus, the hard
+    computation limit per block may be surpassed by chaining multiple transactions
+    between different block.
 
     As a drawback, one can argue that the set of validation rules is not exactly
     the programming language, since it doesn't prescript the sequence of actions,
