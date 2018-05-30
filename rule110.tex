@@ -145,7 +145,17 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     step evolution of the bit is defined by its value $c$ together with the
     values of the two neighboring bits --- the left $\ell$ and the right $r$
     with the transition rule defined in Alg.~\ref{alg:calc_bit}
-    \input{alg_calc_bit.tex}
+
+    \begin{algorithm}[H]
+        \caption{Transition function of the Rule 110 automaton}
+        \label{alg:calc_bit}
+        \begin{algorithmic}[1]
+            \Function{calcBit}{$\ell$, $c$, $r$}
+            \State
+            \Return $\ell c r + cr + c + r$ mod 2
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
 
     For the automaton implementation in a blockchain we use Bitcoin-like
     transactions consisting of inputs and outputs. Every output consists of a
@@ -166,7 +176,30 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 
     Keeping all these in mind, we come to the following validation
     script structure:
-    \input{alg_tx_row.tex}
+
+    \begin{algorithm}[H]
+        \caption{Script, that ensures that the transaction performs correct rule 110 transformation
+        keeping the same rules for further iterations}
+        \label{alg:isRule110}
+        \begin{algorithmic}[1]
+            \Function{validate}{in, out}
+            \Function{isRule110}{inLayer, outLayer}
+            \Function{procCell}{$i$}
+            \Let{$\ell$}{inLayer[$i-1$ mod inLayer.size]}
+            \Let{$c$}{inLayer[$i$]}
+            \Let{$r$}{inLayer[$i+1$ mod inLayer.size]}
+            \State
+            \Return \Call{calcBit}{$\ell$, $c$, $r$}
+            \EndFunction
+            \State \Return outLayer == inLayer.indeces.map(\textsc{procCell})
+            \EndFunction
+            \State
+            \Return \Call{isRule110}{self.payload, out[0].payload}
+            $\wedge$ (self.script = out[0].script)
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
+
     This script performs two checks. First, it takes the payload of a current
     input and ensures, that the application of Rule 110 to it equals to the
     payload of the first output. Second, it checks that the first output script
@@ -219,7 +252,58 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 			% Идеально на клеточках справа проставить номера соответсвующих им транзакций
         \label{fig:bit_txs} }
     \end{figure}
-    \input{alg_tx_bit.tex}
+    \begin{algorithm}[H]
+        \caption{Validation script for the output representing the single bit, and
+        the unbound grid}
+        \label{alg:txBit}
+        \begin{algorithmic}[1]
+            \Function{verify}{in, out}\Comment{``in'' and ``out'' are lists of inputs and outputs}
+            \Function{outCorrect}{out, script}
+            \Comment{output structure check}
+            \Let{scriptCorrect}{out[0].script = script}
+            \Let{isCopy1}{out[1] = out[0].copy(mid$\leftarrow true$)}
+            \Let{isCopy2}{out[2] = out[0].copy(mid$\leftarrow false$)}
+            \State
+            \Return ($\neg$out[0].mid) $\wedge$ scriptCorrect $\wedge$ isCopy1 $\wedge$ isCopy2
+            \EndFunction
+            \Function{correctPayload}{in, out}
+            \Comment{output payload check}
+            \State \(\triangleright\) mid flag is only set for the middle input
+            \Let{inMidCorrect}{in[1].mid $\wedge$ $\neg$(in[0].mid $\vee$ in[2].mid)}
+            \State \(\triangleright\) input positions are correct; n is the index of leftmost column
+            \Let{inYCorrect}{(in[0].n = in[1].n) $\wedge$ (in[0].n = in[2].n)}
+            \Let{inXCorrect}{(in[1].x = in[0].x$+1$) $\wedge$ (in[1].x = in[2].x$-1$)}
+            \State \(\triangleright\) bits satisfy Rule 110
+            \Let{inValCorrect}{out[0].val=\Call{calcBit}{in[1].val, in[0].val, in[2].val}}
+            \State \(\triangleright\) output position matches the input one
+            \Let{outPosCorrect}{out[0].x = in[1].x $\wedge$ (out[0].n = in[0].n$-1$)}
+            \State
+            \Return inValCorrect  $\wedge$ inXCorrect $\wedge$ inYCorrect $\wedge$
+            \par  \hskip\algorithmicindent \hskip\algorithmicindent
+            inMidCorrect $\wedge$ outPosCorrect $\wedge$ in.size=out.size=3
+            \EndFunction
+            \If{in[0].x=n $\wedge$ in.size=1}
+            \Comment{leftmost --- add 2 zeroes to the left}
+            \Let{middle}{in[0].copy(x$\leftarrow$n$-1$, val$\leftarrow$0, mid$\leftarrow true$)}
+            \Let{left}{in[0].copy(x$\leftarrow$n$-2$, val$\leftarrow$0, mid$\leftarrow false$)}
+            \Let{realIn}{left ++ middle ++ in}
+            \ElsIf{in[0].x=n $\wedge$ in.size=2}
+            \Comment{next to leftmost --- add zero to the left}
+            \Let{left}{in[0].copy(x$\leftarrow$n$-1$, val$\leftarrow$0, mid$\leftarrow false$)}
+            \Let{realIn}{left ++ in}
+            \ElsIf{in[0].x=$-1$ $\wedge$ in.size=2}
+            \Comment{rightmost --- add zero to the right}
+            \Let{right}{in[0].copy(x$\leftarrow 1$, val$\leftarrow$0, mid$\leftarrow false$)}
+            \Let{realIn}{in ++ right}
+            \Else
+            \Comment{normal cell}
+            \Let{realIn}{in}
+            \EndIf
+            \State
+            \Return \Call{correctPayload}{realIn, out} $\wedge$ \Call{outCorrect}{out, in[0].script}
+            \EndFunction
+        \end{algorithmic}
+    \end{algorithm}
 
 	The script works as follows. Every output's payload contains its bit value
     $val$, 
