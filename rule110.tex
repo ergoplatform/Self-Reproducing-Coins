@@ -152,7 +152,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
         \begin{algorithmic}[1]
             \Function{calcBit}{$\ell$, $c$, $r$}
             \State
-            \Return $\ell c r + cr + c + r$ mod 2
+            \Return $(\ell\wedge c\wedge r) \oplus (c\wedge r) \oplus c \oplus r$
             \EndFunction
         \end{algorithmic}
     \end{algorithm}
