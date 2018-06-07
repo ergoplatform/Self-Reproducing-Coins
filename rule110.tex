@@ -158,8 +158,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     an output's data may be hardly exploitable.  In this section we assume that
     spending script has a direct access to the outputs.
 
-    Keeping all these in mind, we come to the following validation
-    script structure:
+    Keeping all these in mind, we come to the following validation script:
 
     \begin{algorithm}[H]
         \caption{Script, that ensures that the transaction performs correct rule 110 transformation
@@ -204,9 +203,10 @@ Research Institute\\\email{v.kharin@protonmail.com}}
             $script$ field description.
         \label{fig:txs} }
     \end{figure}
-    Potentially infinite number of sequential transactions in the blockchain
-    leads to the potentially infinite evolution of cellular automaton which is
-    necessary for Turing complete systems.  However, there is one pitfall left.
+
+    Potentially infinite evolution of a cellular automaton, which is
+    needed for Turing complete systems, can be modeled by chaining potentially infinite 
+    number of transactions in the blockchain. However, there is one pitfall left.
     The size of the data stored in the output must be limited from above, since
     the general blockchain rules~\cite{garay2015bitcoin} require the transaction
     validation time to be bound from above in order to satisfy the chain growth
@@ -215,7 +215,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     The workaround is to split the automaton state between
     transactions once it becomes too large. As an extreme case one can make a
     transaction output play a role of a single bit of the automaton. While being
-    inefficient this implementation keeps the logic simple and complies with the
+    inefficient, this implementation keeps the logic simple and complies with the
     requirements of the blockchain and of potentially infinite evolution in
     space and time. The pseudocode of the corresponding script is
     provided in the Algorithm~\ref{alg:txBit} and it's implementation in Ergo smart
