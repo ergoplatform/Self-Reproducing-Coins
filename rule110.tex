@@ -174,7 +174,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
             \State
             \Return \Call{calcBit}{$\ell$, $c$, $r$}
             \EndFunction
-            \State \Return outLayer == inLayer.indices.map(\textsc{procCell})
+            \State \Return outLayer = inLayer.indices.map(\textsc{procCell})
             \EndFunction
             \State
             \Return \Call{isRule110}{self.payload, out[0].payload}
@@ -262,17 +262,17 @@ Research Institute\\\email{v.kharin@protonmail.com}}
             \par  \hskip\algorithmicindent \hskip\algorithmicindent
             inMidCorrect $\wedge$ outPosCorrect $\wedge$ in.size=out.size=3
             \EndFunction
-            \If{in[0].x=n $\wedge$ in.size=1}
+            \If{in[0].x=in[0].n $\wedge$ in.size=1}
             \Comment{leftmost --- add 2 zeroes to the left}
-            \Let{middle}{in[0].copy(x$\leftarrow$n$-1$, val$\leftarrow$0, mid$\leftarrow true$)}
-            \Let{left}{in[0].copy(x$\leftarrow$n$-2$, val$\leftarrow$0, mid$\leftarrow false$)}
+            \Let{middle}{in[0].copy(x$\leftarrow$in[0].n$-1$, val$\leftarrow$0, mid$\leftarrow true$)}
+            \Let{left}{in[0].copy(x$\leftarrow$in[0].n$-2$, val$\leftarrow$0, mid$\leftarrow false$)}
             \Let{realIn}{left ++ middle ++ in}
-            \ElsIf{in[0].x=n $\wedge$ in.size=2}
-            \Comment{next to leftmost --- add zero to the left}
-            \Let{left}{in[0].copy(x$\leftarrow$n$-1$, val$\leftarrow$0, mid$\leftarrow false$)}
+            \ElsIf{in[0].x=in[0].n $\wedge$ in.size=2}
+            \Comment{next to leftmost --- add 0 to the left}
+            \Let{left}{in[0].copy(x$\leftarrow$in[0].n$-1$, val$\leftarrow$0, mid$\leftarrow false$)}
             \Let{realIn}{left ++ in}
             \ElsIf{in[0].x=$-1$ $\wedge$ in.size=2}
-            \Comment{rightmost --- add zero to the right}
+            \Comment{rightmost --- add 0 to the right}
             \Let{right}{in[0].copy(x$\leftarrow 1$, val$\leftarrow$0, mid$\leftarrow false$)}
             \Let{realIn}{in ++ right}
             \Else
