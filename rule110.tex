@@ -70,7 +70,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     contract platforms with the emphasis on the language universality.
     Particularly, in Ethereum~\cite{buterin2014next} the $jump$ opcode was
     introduced in the transaction scripting language in order to incorporate
-    unlimited loops.  In practice this resulted to various vulnerabilities and
+    unlimited loops.  In practice this resulted in various vulnerabilities and
     DoS attacks \cite{atzei2017survey} since transaction computation cost
     (so-called $gas$) can only be calculated in runtime.
     Moreover, Turing-completeness of Ethereum system is
@@ -82,29 +82,29 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     %    significant complications both from formal and security
     %    sides~\cite{atzei2017survey,momot2016seven}.
 
-    Turing complete programming language is the language which allows
+    A Turing-complete programming language is the language which allows
     description of the universal Turing machine. The universal Turing machine is
     the Turing machine which can simulate any other Turing machine; its
     existence is one of the main results of the Turing
     theory~\cite{turing1937computable}. The study of Turing machines is strongly
     motivated by the Church---Turing thesis, which states that Turing machines
-    are capable of universal computation. This thesis is often viewed at as a
+    are capable of universal computation. This thesis is often viewed as a
     definition of computation and computability~\cite{turing1939systems}. The
     set of known computation devices and models was rapidly growing during the
     twentieth century, and the methods of their analysis were improved as well.
     The usual way of proving the Turing completeness of a system of rules,
-    a device or a language is using it to emulate the system that is already
-    proven to be Turing complete.  The system extensively used in our work is a
-    one-dimensional cellular automaton called Rule 110. It was conjectured to
+    a device or a language is using it to emulate a system that is already
+    proven to be Turing complete. A system which we are using in this work is 
+    one-dimensional cellular automaton Rule 110. It was conjectured to
     be Turing complete by S.~Wolfram~\cite{wolfram1986theory}. The conjecture
     was proven by M.~Cook~\cite{cook2004universality} based on the previous
     works by E.~L.~Post~\cite{post1943formal}.
 
-    The utter internal simplicity of Rule 110 makes it an appealing system for
-    the proofs of Turing completeness. In the present work we prove Turing
-    completeness of the whole class of the smart contract languages by explicit
-    construction of the Rule 110. We do not require neither loops, nor jump
-    operator, nor recursive calls inside the transaction. Instead, we treat the
+    The utter simplicity of Rule 110 makes it an appealing basis for proving Turing completeness. 
+    In the present work we prove Turing 
+    completeness of some primitive smart contract languages by explicitly 
+    constructing Rule 110 automaton using them. We do not require neither loops, nor jump
+    operator, nor recursive calls inside a transaction. Instead, we treat the
     computation as if it is occurring between the transactions (or maybe
     blocks). In this context transaction chaining and replication furnishes us
     with potentially infinite loops and recursion, while the union of outputs
@@ -123,15 +123,12 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 
     \section{Rule 110 implementation}
     \label{section2}
-    %    Из чего будем строить машину, Описание нужного куска языка Эрго (возможно это тоже в аппендикс)
-    %    Код кидаем в аппендикс, тут описываем его логику. Описываем логику преобразования одной строки.
-    %    Картинки как с блоками меняется состояние автомата 110
-    %    В блокчейне необходимо иметь константное время валидации для выполнения свойства chain growth (GKL). Для Тьюринг полноты нужно уметь работать со строками произвольного размера, чтобы их валидацуия выполнялась за конечное время, из нужно разбивать на подстроки, крайний случай - 1 бит на выход. (ссылка на код либо в аппендикс, либо на гитхаб)
-    Cellular automaton we construct is known as Rule 110.  It is a
-    one-dimensional string of 0s and 1s together with evolution rules.  The one
-    step evolution of the bit is defined by its value $c$ together with the
-    values of the two neighboring bits --- the left $\ell$ and the right $r$
-    with the transition rule defined in Alg.~\ref{alg:calc_bit}
+
+    In this section we describe an implementation of the Rule 110 cellular automaton. The automaton
+    is transforming one-dimensional string of 0s and 1s by applying evolution rules to them. One
+    step of evolution for one bit is defined by its value $c$ together with the
+    values of the two neighboring bits --- the left $\ell$ and the right $r$, along with a 
+    transition rule defined in Algorithm~\ref{alg:calc_bit}
 
     \begin{algorithm}[H]
         \caption{Transition function of the Rule 110 automaton}
@@ -146,7 +143,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 
     For the automaton implementation in a blockchain we use Bitcoin-like
     transactions consisting of inputs and outputs. Every output consists of a
-    protecting \script{} and a \payload{} while input is a reference to an
+    guarding \script{} and a \payload{} while input is a reference to an
     output from a previous transaction.  We assume that the current state of the
     automaton is stored in the transaction output's \payload{}.  The general
     idea is to use the next transaction as a single step of the system
@@ -178,7 +175,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
             \State
             \Return \Call{calcBit}{$\ell$, $c$, $r$}
             \EndFunction
-            \State \Return outLayer == inLayer.indeces.map(\textsc{procCell})
+            \State \Return outLayer == inLayer.indices.map(\textsc{procCell})
             \EndFunction
             \State
             \Return \Call{isRule110}{self.payload, out[0].payload}
@@ -221,7 +218,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     inefficient this implementation keeps the logic simple and complies with the
     requirements of the blockchain and of potentially infinite evolution in
     space and time. The pseudocode of the corresponding script is
-    provided in the Alg.~\ref{alg:txBit} and it's implementation in Ergo smart
+    provided in the Algorithm~\ref{alg:txBit} and it's implementation in Ergo smart
     contract language is provided at \cite{ergoScript2}. Fig.~\ref{fig:bit_txs}
     schematically shows the sequence of transactions (on the left), that corresponds
     to some area evaluation (on the right) of the automaton run.
@@ -233,10 +230,6 @@ Research Institute\\\email{v.kharin@protonmail.com}}
             outputs, and generates three new ones with identical bit values.
             Hatching indicates ``mid'' flag being unset. Numbers in the cells on
             the right pane correspond to the transaction numbers on the left.
-			% Тут матрица транзакций транспонирована относительно правой картинки - трудно читать. 
-			% К тому же на картинке выделен блок шириной в 5 клеток, хотя показана эволюция только трех. 
-			% Понятно, что крайние две тоже участвуют в определении состояния, но поначалу сбивает с толку. 
-			% Идеально на клеточках справа проставить номера соответсвующих им транзакций
         \label{fig:bit_txs} }
     \end{figure}
     \begin{algorithm}[H]
@@ -318,12 +311,6 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 
     \section{Discussion}
     \label{section3}
-    %    Описываем, что мы сделали рекурсию через вызов выходом самого себя, хотя в самом языке нет циклов и рекурсии.
-    %    Внутриннюю логику можно усложнять для сокращения количества тактов, что приводит к space-time tradeoff - либо пишешь гигантский скрипт который выполняется за 1 такт, либо скрипт простой, но нужно много тактов.
-    %    Правило 110 только это только доказательство полноты, в реальности все делается гораздо эффективнее т.к. в почти любом языке смарт контрактов есть арифметика, не нужно пытаться реализовывать логику через клеточные автоматы.
-    %    Показать что это не экзотика, а достежимо в других языках, например язык Waves и Ethereum (+ посмотреть, что еще есть).
-    %    Практические выводы: 1) позволяет ответить на вопрос, какой класс задач возможно реализовать в данном языке смарт контрактов. 2) Открывает возможность писать тяжелые смарт контраты, требуемые вычисления которых превышают лимит вычислений на блок, 3) ???
-    %    Где же происходят вычисления? ибо мы не задаем алгоритм, а задаем правила верификации. Т.к. в заголовке мы обозначили другой результат, тут обозначить тему и вынести в аппендикс 2
     The most important move in our work was unwinding recursive calls by means
     of transaction chaining, although the language contained neither cycles nor
     recursion. By doing this we let the program be executed over the set of
