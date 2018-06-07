@@ -274,7 +274,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
             \Let{inYCorrect}{(in[0].n = in[1].n) $\wedge$ (in[0].n = in[2].n)}
             \Let{inXCorrect}{(in[1].x = in[0].x$+1$) $\wedge$ (in[1].x = in[2].x$-1$)}
             \State \(\triangleright\) bits satisfy Rule 110
-            \Let{inValCorrect}{out[0].val=\Call{calcBit}{in[1].val, in[0].val, in[2].val}}
+            \Let{inValCorrect}{out[0].val=\Call{calcBit}{in[0].val, in[1].val, in[2].val}}
             \State \(\triangleright\) output position matches the input one
             \Let{outPosCorrect}{out[0].x = in[1].x $\wedge$ (out[0].n = in[0].n$-1$)}
             \State
