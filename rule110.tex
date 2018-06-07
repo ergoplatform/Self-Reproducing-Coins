@@ -307,9 +307,9 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 
 	The script works as follows. Every output's payload contains its bit value
     $val$, 
-    the column index $x$, and the length of the grid $n$ at the current step.
+    the column index $x$, and the minimal $x$ index at the current step $n$.
     As the
-    grid expands by one at every step, $n$ also serves as the row number. By
+    grid expands by one at every step, $-n$ also serves as the row number. By
     default, the transaction spends three inputs (corresponding to the three
     neighboring bits from the previous row), and creates three outputs with the same
     bit value by the automaton rule. One output flagged by $mid$ is supposed to be
