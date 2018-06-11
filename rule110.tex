@@ -14,17 +14,15 @@
 \newcommand{\vk}[1]{\textcolor{blue}{V: {#1}}}
 \newcommand{\payload}{\textit{payload}}
 \newcommand{\script}{\textit{script}}
-%\newcommand{\And}{\&\&}
 \newcommand{\And}{\textsf{ and }}
-%\newcommand{\And}{\wedge}
 \def\Let#1#2{\State #1 $\gets$ #2}
 \algnewcommand{\IfThenElse}[3]{\algorithmicif\ #1\ \algorithmicthen\ #2\
 \algorithmicelse\ #3}
-\algnewcommand\Or{\textsf{or }}
-\algnewcommand\Xor{\textsf{ xor }}
-\algnewcommand\Int{\textsf{int}}
-\algnewcommand\Not{\textsf{not}}
-\algnewcommand\Mod{\textsf{ mod }}
+%\algnewcommand\Or{\textsf{or}}
+%\algnewcommand\Xor{\textsf{xor}}
+%\algnewcommand\Int{\textsf{int}}
+%\algnewcommand\Not{\textsf{not}}
+%\algnewcommand\Mod{\textsf{mod}}
 
 \begin{document}
     \title{Self-Reproducing Coins as Universal Turing Machine}
@@ -44,7 +42,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
         (such as loops). 
 		%A more fundamental problem is combining unpredictability of arbitrary 
         %script execution time with the blockchain requirements.
-        In opposite, we show that Turing completeness of a blockchain system can
+        In opposite, we show that Turing-completeness of a blockchain system can
         be achieved through unwinding the recursive calls between
         multiple transactions and blocks instead of using a single one. We prove 
         it by constructing a simple universal Turing machine using
