@@ -206,13 +206,10 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 
     Potentially infinite evolution of a cellular automaton, which is
     needed for Turing complete systems, can be modeled by chaining potentially infinite 
-    number of transactions in the blockchain. However, there is one pitfall left.
-    The size of the data stored in the output must be limited from above, since
-    the general blockchain rules~\cite{garay2015bitcoin} require the transaction
-    validation time to be bound from above in order to satisfy the chain growth
-    property.
+    number of transactions in the blockchain. However, there is a pitfall left.
+    The size of the data stored in an output must have an upper-bound, and validation time for a transaction must be bounded as well, otherwise blockchain could trivially stuck.
 
-    The workaround is to split the automaton state between
+    The natural workaround is to split the automaton state between
     transactions once it becomes too large. As an extreme case one can make a
     transaction output play a role of a single bit of the automaton. While being
     inefficient, this implementation keeps the logic simple and complies with the
