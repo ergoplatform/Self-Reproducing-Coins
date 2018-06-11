@@ -73,9 +73,9 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     unlimited loops.  In practice this resulted in various vulnerabilities and
     DoS attacks \cite{atzei2017survey} since transaction computation cost
     (so-called $gas$) can only be calculated in runtime.
-    Moreover, Turing-completeness of Ethereum system is
+    Moreover, Turing-completeness of Ethereum is
     still a subject of debates mostly due to undecidability of the halt problem
-    in combination with the bounded block validation time. Particularly, the gas
+    in combination with a bounded block validation time. Particularly, the gas
     limit is often viewed at as a fundamental component preventing
     Turing-completeness~\cite{miller2016ethereum}.
     %    Their approach, while being successful in general, exposed few
@@ -92,7 +92,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     definition of computation and computability~\cite{turing1939systems}. The
     set of known computation devices and models was rapidly growing during the
     twentieth century, and the methods of their analysis were improved as well.
-    The usual way of proving the Turing completeness of a system of rules,
+    The usual way of proving the Turing completeness of a system,
     a device or a language is using it to emulate a system that is already
     proven to be Turing complete. A system which we are using in this work is 
     one-dimensional cellular automaton Rule 110. It was conjectured to
@@ -101,9 +101,9 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     works by E.~L.~Post~\cite{post1943formal}.
 
     The utter simplicity of Rule 110 makes it an appealing basis for proving Turing completeness. 
-    In the present work we prove Turing 
-    completeness of some primitive smart contract languages by explicitly 
-    constructing Rule 110 automaton using them. We do not require neither loops, nor jump
+    In the present work we construct Rule 110 automaton algorithm for UTXO blockchain
+    and implement it in $\Sigma$-State smart-contract language\cite{chepurnoy2017sigma}.
+    We do not require neither loops, nor jump
     operator, nor recursive calls inside a transaction. Instead, we treat the
     computation as if it is occurring between the transactions (or maybe
     blocks). In this context transaction chaining and replication furnishes us
