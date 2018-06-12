@@ -76,9 +76,6 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     in combination with a bounded block validation time. Particularly, the gas
     limit is often viewed at as a fundamental component preventing
     Turing-completeness~\cite{miller2016ethereum}.
-    %    Their approach, while being successful in general, exposed few
-    %    significant complications both from formal and security
-    %    sides~\cite{atzei2017survey,momot2016seven}.
 
     A Turing-complete programming language is the language which allows
     description of the universal Turing machine. The universal Turing machine is
@@ -122,10 +119,10 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     \section{Rule 110 implementation}
     \label{section2}
 
-    In this section we describe an implementation of the Rule 110 cellular automaton. The automaton
-    is transforming one-dimensional string of 0s and 1s by applying evolution rules to them. One
+    In this section we describe an implementation of the Rule 110 cellular automaton. This automaton
+    is transforming a one-dimensional string of 0s and 1s by applying evolution rules. One
     step of evolution for one bit is defined by its value $c$ together with the
-    values of the two neighboring bits --- the left $\ell$ and the right $r$, along with a 
+    values of the two neighboring bits --- the left one $\ell$ and the right one $r$, along with a 
     transition rule defined in Algorithm~\ref{alg:calc_bit}
 
     \begin{algorithm}[H]
@@ -203,9 +200,10 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     \end{figure}
 
     Potentially infinite evolution of a cellular automaton, which is
-    needed for Turing complete systems, can be modeled by chaining potentially infinite 
+    required for Turing completeness, can be modeled by chaining potentially infinite
     number of transactions in the blockchain. However, there is a pitfall left.
-    The size of the data stored in an output must have an upper-bound, and validation time for a transaction must be bounded as well, otherwise blockchain could trivially stuck.
+    The size of the data stored in an output must have an upper-bound, and validation
+    time for a transaction must be bounded as well, otherwise blockchain could trivially stuck.
 
     The natural workaround is to split the automaton state between
     transactions once it becomes too large. As an extreme case one can make a
@@ -318,19 +316,21 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     relatively fast execution, or leave the script logic short and simple, but
     the execution can consume more transactions.
 
-    It worth noting that any practical algorithm implementation can be
+    It is worth noting that any practical algorithm implementation can be
     significantly optimized using the language built-ins such as arithmetic
-    operations. Our construction is not needed for that, it just
+	operations. Rule 110 implementation is not required for practical cases, it just
     guarantees that any algorithm can be potentially implemented and executed.
     We also claim that our approach can be generally used for Turing completeness
     proofs of various smart contract languages, e.g. it might be possible to prove
     that smart contracts of Waves platform \cite{wavesSmarts} are actually
     Turing-complete, although the authors claimed the opposite.
 
-    Blockchain strict upper-bound for transaction validation time makes unbounded
-    loops useless in terms of variety of algorithms that may be implemented
-    inside one transaction.
-    In absence of unbounded loops one can estimate script complexity in compile-time
+	Unbouded loops power in terms of variety of algorithms that may be implemented
+    inside one transaction can't be fully utilised in blockchain systems because of 
+	the strict upper bound on transaction validation time.
+
+    Surprisingly, one can work around this limitation by avoiding unbounded loops.
+	This way he can estimate script complexity in compile-time
     and divide algorithm into multiple transactions if needed. Thus, the hard
     computation limit per block may be surpassed by chaining multiple transactions
     between different block.
