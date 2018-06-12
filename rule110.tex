@@ -304,29 +304,31 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 
     \section{Discussion}
     \label{section3}
-    The most important move in our work was unwinding recursive calls by means
-    of transaction chaining, although the language contained neither cycles nor
+
+    The most important move in our work is unwinding recursive calls by means
+    of transaction chaining, although the language we use contains neither cycles nor
     recursion. By doing this we let the program be executed over the set of
-    transactions and blocks. This in turn helped us to work around the halting
-    problem, which used to make arbitrary script execution impossible inside a
+    transactions and blocks. \knote{fix the following sentence: } 
+    This in turn helps us to work around the halting problem, which is used to make 
+    arbitrary script execution impossible inside a
     transaction in the view of the chain growth property. In our approach a single
-    transaction approximately corresponds to a single cycle of the computation
-    machine. The trade-off is again between the consumed space and execution
+    transaction is approximately corresponding to a single cycle of a computing 
+    machine. The possible trade-off is between the consumed space and execution
     time: one can either incorporate complex logic in the script, and expect
     relatively fast execution, or leave the script logic short and simple, but
     the execution can consume more transactions.
 
     It is worth noting that any practical algorithm implementation can be
-    significantly optimized using the language built-ins such as arithmetic
+    significantly optimized using richer language features, such as arithmetic
 	operations. Rule 110 implementation is not required for practical cases, it just
     guarantees that any algorithm can be potentially implemented and executed.
-    We also claim that our approach can be generally used for Turing completeness
+    We also claim that our approach can be generally used for Turing-completeness
     proofs of various smart contract languages, e.g. it might be possible to prove
     that smart contracts of Waves platform \cite{wavesSmarts} are actually
     Turing-complete, although the authors claimed the opposite.
 
-	Unbouded loops power in terms of variety of algorithms that may be implemented
-    inside one transaction can't be fully utilised in blockchain systems because of 
+	Unbounded loops power in terms of variety of algorithms that may be implemented
+    inside one transaction can not be fully utilized in blockchain systems because of 
 	the strict upper bound on transaction validation time.
 
     Surprisingly, one can work around this limitation by avoiding unbounded loops.
