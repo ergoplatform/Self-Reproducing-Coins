@@ -68,7 +68,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     (so-called $gas$) can only be calculated in runtime.
     Moreover, Turing-completeness of Ethereum is
     still a subject of debates mostly due to undecidability of the halt problem
-    in combination with a bounded block validation time. Particularly, the gas
+    in combination with a bounded block validation time. The gas
     limit is often viewed at as a fundamental component preventing
     Turing-completeness~\cite{miller2016ethereum}.
 
@@ -106,16 +106,16 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     describe a naive implementation of Rule 110 using simple Bitcoin-like
     scripting language.  Then we discuss the pitfalls arising from compliance
     with the blockchain properties, and show the way to overcome them.  Section
-    \ref{section3} contains the discussion of the implementation, language
-    requirements, and usability of the method for the real-world blockchain
-    applications. \nameref{appendix1} sketches the discussion on the nature of
-    computation in the framework of blockchain scripting and validation rules.
+    \ref{section3} contains the discussion of the implementation, usability of
+    the method for the real-world blockchain applications and sketches the
+    discussion on the nature of computation in the framework of blockchain
+    scripting and validation rules.
 
     \section{Rule 110 implementation}
     \label{section2}
 
     In this section we describe an implementation of the Rule 110 cellular automaton. This automaton
-    is transforming a one-dimensional string of 0s and 1s by applying evolution rules. One
+    is transforming a one-dimensional string of 0s and 1s applying evolution rules. One
     step of evolution for one bit is defined by its value $c$ together with the
     values of the two neighboring bits --- the left one $\ell$ and the right one $r$, along with a 
     transition rule defined in Algorithm~\ref{alg:calc_bit}
@@ -145,7 +145,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     in the vast amount of existing blockchains, since in most cases scripts
     verify the signature of the spending transaction, which is constructed over
     the byte array containing the new outputs.  However, this way of access to
-    an output's data may be hardly exploitable.  In this section we assume that
+    an output's data may be hardly exploitable.  We assume that
     spending script has a direct access to the outputs.
 
     Keeping all these in mind, we come to the following validation script:
@@ -174,7 +174,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     \end{algorithm}
 
     This script performs two checks. First, it takes the payload of a current
-    input and ensures, that the application of Rule 110 to it equals to the
+    input and ensures, that the result of Rule 110 application equals to the
     payload of the first output. Second, it checks that the first output script
     is the same as a script of the input. The full implementation of this script
     in the smart contract language of an existing UTXO blockchain Ergo is
@@ -307,7 +307,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     of the blockchain while there is a strict upper-bound for block validation time~
     \footnote{For example, in the Bitcoin backbone protocol model from~\cite{garay2015bitcoin}, block validation 
     should happen within finite and a-priori known round duration.}.
-    A single transaction in the blockchain is approximately corresponding to a single cycle of a computing 
+    A single transaction in the blockchain approximately corresponds to a single cycle of a computing 
     machine. A possible trade-off here is between complexity of a single step and execution
     time: one can either incorporate complex logic into a script, and expect
     relatively fast execution, or leave the script logic short and simple, but
@@ -338,7 +338,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     The same is true for Ethereum and other blockchains with Turing-complete smart contracts: 
     the blockchain as a data structure is not doing active computations, it is storing their result, 
     if the computations are valid according to some rules. Chain quality property from~\cite{garay2015bitcoin} 
-    should hold for a blockchain protocol in order to have a guarantee on input presence. 
+    should hold for a blockchain protocol in order to guarantee an input presence. 
 
 
 %    To make an oracle 
