@@ -8,7 +8,7 @@
 
 \usepackage{nameref}
 \usepackage{hyperref}
-%\usepackage{amsmath}
+
 \newcommand{\knote}[1]{\textcolor{green}{A: {#1}}}
 \newcommand{\dnote}[1]{\textcolor{red}{D: {#1}}}
 \newcommand{\vk}[1]{\textcolor{blue}{V: {#1}}}
@@ -18,11 +18,6 @@
 \def\Let#1#2{\State #1 $\gets$ #2}
 \algnewcommand{\IfThenElse}[3]{\algorithmicif\ #1\ \algorithmicthen\ #2\
 \algorithmicelse\ #3}
-%\algnewcommand\Or{\textsf{or}}
-%\algnewcommand\Xor{\textsf{xor}}
-%\algnewcommand\Int{\textsf{int}}
-%\algnewcommand\Not{\textsf{not}}
-%\algnewcommand\Mod{\textsf{mod}}
 
 \begin{document}
     \title{Self-Reproducing Coins as Universal Turing Machine}
@@ -307,9 +302,11 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 
     The most important move in our work is unwinding recursive calls by means
     of transaction chaining, although the language we use contains neither cycles nor
-    recursion. By doing this we let a program to be executed over a set of
+    recursion. By doing this we let a program to be executed over a sequence of
     transactions and blocks. This approach allows us to run programs in potentially infinite time on top 
-    of the blockchain while there is a strict upper-bound for block validation time.
+    of the blockchain while there is a strict upper-bound for block validation time~
+    \footnote{For example, in the Bitcoin backbone protocol model from~\cite{garay2015bitcoin}, block validation 
+    should happen within finite and a-priori known round duration.}.
     A single transaction in the blockchain is approximately corresponding to a single cycle of a computing 
     machine. A possible trade-off here is between complexity of a single step and execution
     time: one can either incorporate complex logic into a script, and expect
