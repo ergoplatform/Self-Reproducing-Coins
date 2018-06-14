@@ -313,25 +313,6 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     relatively fast execution, or leave the script logic short and simple, but
     the execution will be about more transactions then.
 
-    It is worth noting that any practical algorithm implementation can be
-    significantly optimized by using richer language features, such as arithmetic
-	operations. Rule 110 implementation is not required for practical cases, it just
-    guarantees that any algorithm can be potentially executed on top of the blockchain.
-    Our approach can be generally used for Turing-completeness
-    proofs of various smart contract languages, for example, it might be possible to prove
-    that smart contracts of Waves platform \cite{wavesSmarts} are actually
-    Turing-complete, although the authors are claiming the opposite at the time of writing.
-
-	%Unbounded loops power in terms of variety of algorithms that may be implemented
-    %inside one transaction can not be fully utilized in blockchain systems because of 
-	%the strict upper bound on transaction validation time.
-
-    %Surprisingly, one can work around this limitation by avoiding unbounded loops.
-	%This way he can estimate script complexity in compile-time
-    %and divide algorithm into multiple transactions if needed. Thus, the hard
-    %computation limit per block may be surpassed by chaining multiple transactions
-    %between different block.
-
     One can wonder how evolving data structures~(a blockchain and a
     corresponding UTXO set) along with programmable validation rules constitute
     a Turing machine. Obviously, we do need to include honest miners as a
@@ -341,7 +322,31 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     computations, it is stores the result, if the computations are valid
     according to some rules. Chain quality property from~\cite{garay2015bitcoin}
     should hold for a blockchain protocol in order to guarantee an input
-    presence. 
+    presence.
+
+    Our approach can be generally used for Turing-completeness
+    proofs of various smart contract languages, for example, it might be possible to prove
+    that smart contracts of Waves platform \cite{wavesSmarts} are actually
+    Turing-complete, although the authors claim the opposite.
+    Rule 110 implementation is not required for practical cases, it just
+    guarantees that any algorithm can be potentially executed on top of the blockchain.
+
+    As one can see, self-reproducing coins allow on-chain execution of the algorithms with arbitrary complexity.
+    However, their efficient usage may require techniques significantly different from the conventional ones,
+    for example development environment for such multi-transactional scripts.
+
+    %Unbounded loops power in terms of variety of algorithms that may be implemented
+    %inside one transaction can not be fully utilized in blockchain systems because of 
+	%the strict upper bound on transaction validation time.
+
+    %Surprisingly, one can work around this limitation by avoiding unbounded loops.
+	%This way he can estimate script complexity in compile-time
+    %and divide algorithm into multiple transactions if needed. Thus, the hard
+    %computation limit per block may be surpassed by chaining multiple transactions
+    %between different block.
+
+
+
 
 
 %    To make an oracle 
