@@ -93,7 +93,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     The utter simplicity of Rule 110 makes it an appealing basis for proving Turing completeness. 
     In the present work we construct Rule 110 automaton algorithm for UTXO blockchain
     and implement it in $\Sigma$-State smart-contract language\cite{chepurnoy2017sigma}.
-    We do not require neither loops, nor jump
+    We require neither loops, nor jump
     operator, nor recursive calls inside a transaction. Instead, we treat the
     computation as if it is occurring between the transactions (or maybe
     blocks). In this context transaction chaining and replication furnishes us
@@ -317,7 +317,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     significantly optimized by using richer language features, such as arithmetic
 	operations. Rule 110 implementation is not required for practical cases, it just
     guarantees that any algorithm can be potentially executed on top of the blockchain.
-    We also claim that our approach can be generally used for Turing-completeness
+    Our approach can be generally used for Turing-completeness
     proofs of various smart contract languages, for example, it might be possible to prove
     that smart contracts of Waves platform \cite{wavesSmarts} are actually
     Turing-complete, although the authors are claiming the opposite at the time of writing.
