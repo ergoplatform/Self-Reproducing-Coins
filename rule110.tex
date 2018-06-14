@@ -307,14 +307,14 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 
     The most important move in our work is unwinding recursive calls by means
     of transaction chaining, although the language we use contains neither cycles nor
-    recursion. By doing this we let the program be executed over the set of
-    transactions and blocks. This approach allows us to build potentially infinite programs on top 
-    of the blockchain, where there is a strict upper-bound for block validation time.
-    A single transaction is approximately corresponding to a single cycle of a computing 
-    machine. A possible trade-off here is between the complexity of a single step and execution
-    time: one can either incorporate complex logic in the script, and expect
+    recursion. By doing this we let a program to be executed over a set of
+    transactions and blocks. This approach allows us to run programs in potentially infinite time on top 
+    of the blockchain while there is a strict upper-bound for block validation time.
+    A single transaction in the blockchain is approximately corresponding to a single cycle of a computing 
+    machine. A possible trade-off here is between complexity of a single step and execution
+    time: one can either incorporate complex logic into a script, and expect
     relatively fast execution, or leave the script logic short and simple, but
-    the execution can consume more transactions.
+    the execution will be about more transactions then.
 
     It is worth noting that any practical algorithm implementation can be
     significantly optimized by using richer language features, such as arithmetic
@@ -323,30 +323,45 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     We also claim that our approach can be generally used for Turing-completeness
     proofs of various smart contract languages, e.g. it might be possible to prove
     that smart contracts of Waves platform \cite{wavesSmarts} are actually
-    Turing-complete, although the authors claimed the opposite.
+    Turing-complete, although the authors are claiming the opposite at the time of writing.
 
-	Unbounded loops power in terms of variety of algorithms that may be implemented
-    inside one transaction can not be fully utilized in blockchain systems because of 
-	the strict upper bound on transaction validation time.
+	%Unbounded loops power in terms of variety of algorithms that may be implemented
+    %inside one transaction can not be fully utilized in blockchain systems because of 
+	%the strict upper bound on transaction validation time.
 
-    Surprisingly, one can work around this limitation by avoiding unbounded loops.
-	This way he can estimate script complexity in compile-time
-    and divide algorithm into multiple transactions if needed. Thus, the hard
-    computation limit per block may be surpassed by chaining multiple transactions
-    between different block.
+    %Surprisingly, one can work around this limitation by avoiding unbounded loops.
+	%This way he can estimate script complexity in compile-time
+    %and divide algorithm into multiple transactions if needed. Thus, the hard
+    %computation limit per block may be surpassed by chaining multiple transactions
+    %between different block.
 
-    As a drawback, one can argue that the set of validation rules is not exactly
-    the programming language, since it doesn't prescript the sequence of actions,
-    but rather the way to check whether the result is correct. Here we stay on the
-    practical side: in our case the validation description is detailed enough to
-    convert it to the strict sequence of actions, hence it actually defines an
-    algorithm. For the more detailed discussion on the subject we address reader
-    to \nameref{appendix1}.
+    One can wonder how evolving data structures~(a blockchain and a corresponding UTXO set) 
+    along with programmable validation rules constitute a Turing machine. Obviously, we do need 
+    to include honest miners as well, their efforts are making the input tape of the machine. 
+    The same is true for Ethereum and other blockchains with Turing-complete smart contracts: 
+    the blockchain as a data structure is not doing active computations, it is storing their result, 
+    if the computations are valid according to some rules. Chain quality property from~\cite{garay2015bitcoin} 
+    should hold for a blockchain protocol in order to have a guarantee on input presence. 
+
+
+%    To make an oracle 
+%    machine~(o-machine) out of the blockchain, we add an oracle tape~(in addition to the working tape, 
+%    which is storing the machine state). The machine is calling an oracle, which is simulating honest 
+%    miners in the blockchain network; thus the oracle is providing whether valid . We skip halting conditions processing for 
+%    simplicity. We note that an oracle machine can simulate any Turing machine~(a-machine).
+
+%    One can argue that a set of validation rules is not exactly a programming language, 
+%    since it does not prescript the sequence of actions, but rather the way to check whether 
+%    the result is correct. Here we stay on the
+%    practical side: in our case the validation description is detailed enough to
+%    convert it to the strict sequence of actions, hence it actually defines an
+%    algorithm. For the more detailed discussion on the subject we address reader
+%    to \nameref{appendix1}.
 
     \bibliography{sources}
-    \section{Appendix~1}
-    \label{appendix1}
+    
 
-    %    Где же происходят вычисления? ибо мы не задаем алгоритм, а задаем правила верификации. Можно сравнение, что в обычном компьютере движущая сила это электричество.. Оффчейн вычисления - требуем найти корни многочлена, или дискретный логарифм.. Посмотреть на декларативные языки программирования, может какие-нидь клеточные автоматы в экселе. Pay-for-proof contracts из биткоина.
+%    \section{Appendix~1}
+%    \label{appendix1}
 
 \end{document}
