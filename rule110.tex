@@ -321,14 +321,29 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 
     One can wonder how evolving data structures~(a blockchain and a
     corresponding UTXO set) along with programmable validation rules constitute
-    a Turing machine. Obviously, we do need to include honest miners as a
-    component of the machine as well, their efforts are making the input tape of
-    the machine.  The same is true for Ethereum and other blockchains with smart
-    contracts: the blockchain as a data structure does not perform any active
-    computations, it is stores the result, if the computations are valid
-    according to some rules. Chain quality property from~\cite{garay2015bitcoin}
-    should hold for a blockchain protocol in order to guarantee an input
-    presence.
+    a Turing machine. Obviously, we do need to include users, forming tranasctions,
+    and majority of miners, including transactions into blocks, as a
+    component of the machine as well --- their efforts are making the input tape of
+    the machine. The same is true for Ethereum and other blockchains with smart
+    contracts: the blockchain as a data structure does not perform any computations,
+    they should be initialized by a user.
+    The question is how to convert a validation script to a strict
+    sequence of actions user should perform to form a correct transaction.
+    For the more detailed discussion on the subject we address reader
+    to \nameref{appendix1}.
+
+    %    , it is stores the result, if the computations are valid
+    %    according to some rules. Chain quality property from~\cite{garay2015bitcoin}
+    %    should hold for a blockchain protocol in order to guarantee an input
+    %    presence.
+
+    %    One can argue that a set of validation rules is not exactly a programming language,
+    %    since it does not prescript the sequence of actions, but rather the way to check whether
+    %    the result is correct. Here we stay on the
+    %    practical side: in our case the validation description is detailed enough to
+    %    convert it to the strict sequence of actions, hence it actually defines an
+    %    algorithm. For the more detailed discussion on the subject we address reader
+    %    to \nameref{appendix1}.
 
     Our approach can be generally used for Turing completeness
     proofs of various smart contract languages. For example, one may prove
@@ -361,13 +376,6 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 %    miners in the blockchain network; thus the oracle is providing whether valid . We skip halting conditions processing for 
 %    simplicity. We note that an oracle machine can simulate any Turing machine~(a-machine).
 
-%    One can argue that a set of validation rules is not exactly a programming language, 
-%    since it does not prescript the sequence of actions, but rather the way to check whether 
-%    the result is correct. Here we stay on the
-%    practical side: in our case the validation description is detailed enough to
-%    convert it to the strict sequence of actions, hence it actually defines an
-%    algorithm. For the more detailed discussion on the subject we address reader
-%    to \nameref{appendix1}.
 
     \bibliography{sources}
     
