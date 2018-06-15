@@ -420,7 +420,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
         \caption{Transaction creation algorithm}
         \label{alg:tx}
         \begin{algorithmic}[1]
-            \For{$in[0]~from~UTXO$}
+            \For{$in[0]~\gets~UTXO$}
             %\Let{in[0]}{from UTXO}
                 \Let{i}{0}
                 \While{$scripts~of~in[0]...in[i]~have~rule~g()~for~in[i+1]$}
