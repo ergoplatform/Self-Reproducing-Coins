@@ -424,7 +424,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
             %\Let{in[0]}{from UTXO}
                 \Let{i}{0}
                 \While{$scripts~of~in[0]...in[i]~have~rule~g()~for~in[i+1]$}
-                    \Let{in[i+1]}{g(in[0]...in[i])}
+                    \Let{in[i+1]}{UTXO(g(in[0]...in[i]))}
                     \Let{i}{i+1}
                 \EndWhile
                 \Let{j}{0}
