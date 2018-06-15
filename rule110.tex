@@ -110,9 +110,9 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     the method for the real-world blockchain applications and sketches the
     discussion on the nature of computation in the framework of blockchain
     scripting and validation rules.
-    \nameref{appendix1} sketches the discussion on the nature of
-    computation in the framework of blockchain scripting and validation rules.
-
+    In \nameref{appendix1} we describe the structure of general purpose guarding script
+    which can be transformed into actual algorithm, and the transformation procedure.
+    
     \section{Rule 110 implementation}
     \label{section2}
 
@@ -312,8 +312,9 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     of the blockchain while there is a strict upper-bound for block validation time. % перенес ссылку на GKL в первое место, где мы про это говорим
     A single transaction in the blockchain approximately corresponds to a single
     cycle of a computing machine.
-    This single cycle may be as complex, as language build-ins allows, however for
-    security reasons it should be able to estimate it's evaluation time in compile time.
+    The cycle may be as complex, as language built-ins allow, however for
+    security reasons it must be possible to estimate its evaluation time during
+    compilation.
     %    A possible trade-off here is between complexity of a single step and execution
 %    time: one can either incorporate complex logic into a script, and expect
 %    relatively fast execution, or leave the script logic short and simple, but
@@ -325,17 +326,17 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     and majority of miners, including transactions into blocks, as a
     component of the machine as well --- their efforts are making the input tape of
     the machine. The same is true for Ethereum and other blockchains with smart
-    contracts: the blockchain as a data structure does not perform any computations,
-    they should be initialized by a client.
-    The question is how to convert a validation script to a strict
-    sequence of actions client should perform to form a correct transaction.
-    For the more detailed discussion on the subject we address reader
-    to \nameref{appendix1}.
+    contracts: the blockchain as a data structure does not perform any
+    computations --- they should be initialized by a client.
+    %The question is how to convert a validation script to a strict
+    %sequence of actions client should perform to form a correct transaction.
+    %For the more detailed discussion on the subject we address reader
+    %to \nameref{appendix1}.
 
     %    , it is stores the result, if the computations are valid
     %    according to some rules. Chain quality property from~\cite{garay2015bitcoin}
     %    should hold for a blockchain protocol in order to guarantee an input
-    %    presence.
+    %    presene.
 
     %    One can argue that a set of validation rules is not exactly a programming language,
     %    since it does not prescript the sequence of actions, but rather the way to check whether
@@ -345,15 +346,16 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     %    algorithm. For the more detailed discussion on the subject we address reader
     %    to \nameref{appendix1}.
 
-    Our approach can be generally used for Turing completeness
-    proofs of various smart contract languages. For example, one may prove
+    Our approach can be used for Turing completeness
+    proofs of various smart contract languages in general. For example, it might be
+    possible to prove
     that smart contracts of Waves platform \cite{wavesSmarts} are actually
     Turing complete, although the authors claimed the opposite.
-    Since Rule 110 implementation is not required for practical cases, it
+    Rule 110 implementation is not required for practical cases, it just
     guarantees that any algorithm can be potentially implemented.
-    Although in theory we have this guarantee, the efficient usage of
-    self-reproducing coins in practice may require a new development
-    environment, including high-level smart contract language for
+    Despite existence of this guarantee, efficient usage of
+    self-reproducing coins in practice may require new machinery including development
+    environments and high-level smart contract languages for
     such multi-transactional computations.
 
     %Unbounded loops power in terms of variety of algorithms that may be implemented
