@@ -37,7 +37,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
         (such as loops). 
 		%A more fundamental problem is combining unpredictability of arbitrary 
         %script execution time with the blockchain requirements.
-        In opposite, we show that Turing-completeness of a blockchain system can
+        In opposite, we show that Turing completeness of a blockchain system can
         be achieved through unwinding the recursive calls between
         multiple transactions and blocks instead of using a single one. We prove 
         it by constructing a simple universal Turing machine using
@@ -59,20 +59,20 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     rules of transaction validation can incorporate complicated logic, which is
     the essence of so-called smart contracts. In the case of Bitcoin this logic
     is implemented in the special purpose Script language, which is believed not
-    to be Turing complete. This belief stimulated development of other smart
+    to be Turing complete. This belief stimulated the development of other smart
     contract platforms with the emphasis on the language universality.
     Particularly, in Ethereum~\cite{buterin2014next} the $jump$ opcode was
     introduced in the transaction scripting language in order to incorporate
     unlimited loops.  In practice this resulted in various vulnerabilities and
     DoS attacks \cite{atzei2017survey} since transaction computation cost
     (so-called $gas$) can only be calculated in runtime.
-    Moreover, Turing-completeness of Ethereum is
-    still a subject of debates mostly due to undecidability of the halt problem
+    Moreover, Turing completeness of Ethereum is
+    still a subject of debates mostly due to the undecidability of the halt problem
     in combination with a bounded block validation time. The gas
-    limit is often viewed at as a fundamental component preventing
-    Turing-completeness~\cite{miller2016ethereum}.
+    limit is often viewed as a fundamental component preventing
+    Turing completeness~\cite{miller2016ethereum}.
 
-    A Turing-complete programming language is the language which allows
+    A Turing complete programming language is a language which allows
     description of the universal Turing machine. The universal Turing machine is
     the Turing machine which can simulate any other Turing machine; its
     existence is one of the main results of the Turing
@@ -102,8 +102,8 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     The underlying idea of complexity growth is similar to the one expressed
     in~\cite{von1951general,von1966theory}.
 
-    This paper is structured as follows: in the Section \ref{section2} we first
-    describe a naive implementation of Rule 110 using simple Bitcoin-like
+    This paper is structured as follows: in Section \ref{section2} we first
+    describe a naive implementation of Rule 110 using a simple Bitcoin-like
     scripting language.  Then we discuss the pitfalls arising from compliance
     with the blockchain properties, and show the way to overcome them.  Section
     \ref{section3} contains the discussion of the implementation, usability of
@@ -114,7 +114,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     \section{Rule 110 implementation}
     \label{section2}
 
-    In this section we describe an implementation of the Rule 110 cellular automaton. This automaton
+    In this section we describe an implementation of Rule 110 cellular automaton. This automaton
     is transforming a one-dimensional string of 0s and 1s applying evolution rules. One
     step of evolution for one bit is defined by its value $c$ together with the
     values of the two neighboring bits --- the left one $\ell$ and the right one $r$, along with a 
@@ -146,7 +146,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     verify the signature of the spending transaction, which is constructed over
     the byte array containing the new outputs.  However, this way of access to
     an output's data may be hardly exploitable.  We assume that
-    spending script has a direct access to the outputs.
+    spending script has direct access to the outputs.
 
     Keeping all these in mind, we come to the following validation script:
 
@@ -197,8 +197,9 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     Potentially infinite evolution of a cellular automaton, which is
     required for Turing completeness, can be modeled by chaining potentially infinite
     number of transactions in the blockchain. However, there is a pitfall left.
-    The size of the data stored in an output must have an upper-bound, and validation
-    time for a transaction must be bounded as well, otherwise blockchain could trivially stuck.
+    The size of the data stored in output must have an upper-bound, and validation
+    time for a transaction must be bounded as well, otherwise blockchain could
+    trivially get stuck.
 
     The natural workaround is to split the automaton state between
     transactions once it becomes too large. As an extreme case one can make a
@@ -290,9 +291,9 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     inputs (line 10) and the fact that all outputs are identical except the $mid$
     flag, which is set only once (lines 2--7).
 
-    Since the Turing-completeness of the Rule 110 was proven
+    Since the Turing completeness of Rule 110 was proven
     in~\cite{cook2004universality}, we conclude that even though the scripting
-    language itself does not allow infinite loops, Turing-completeness of the
+    language itself does not allow infinite loops, Turing completeness of the
     system can be achieved by combining multiple transactions together. Note
     that our language requirements are not very demanding, and can be met in a 
     number of platforms avoiding complicated ad-hoc structures.
@@ -300,7 +301,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     \section{Discussion}
     \label{section3}
 
-    The most important move in our work is unwinding recursive calls by means
+    The crucial move in our work is unwinding recursive calls by means
     of transaction chaining, although the language we use contains neither cycles nor
     recursion. By doing this we let a program to be executed over a sequence of
     transactions and blocks. This approach allows us to run programs in potentially infinite time on top 
@@ -324,10 +325,10 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     should hold for a blockchain protocol in order to guarantee an input
     presence.
 
-    Our approach can be generally used for Turing-completeness
+    Our approach can be generally used for Turing completeness
     proofs of various smart contract languages, for example, it might be possible to prove
     that smart contracts of Waves platform \cite{wavesSmarts} are actually
-    Turing-complete, although the authors claim the opposite.
+    Turing complete, although the authors claim the opposite.
     Rule 110 implementation is not required for practical cases, it just
     guarantees that any algorithm can be potentially executed on top of the blockchain.
 
