@@ -110,6 +110,8 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     the method for the real-world blockchain applications and sketches the
     discussion on the nature of computation in the framework of blockchain
     scripting and validation rules.
+    \nameref{appendix1} sketches the discussion on the nature of
+    computation in the framework of blockchain scripting and validation rules.
 
     \section{Rule 110 implementation}
     \label{section2}
@@ -198,8 +200,10 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     required for Turing completeness, can be modeled by chaining potentially infinite
     number of transactions in the blockchain. However, there is a pitfall left.
     The size of the data stored in output must have an upper-bound, and validation
-    time for a transaction must be bounded as well, otherwise blockchain could
-    trivially get stuck.
+    time for a transaction must be bounded as well
+    ~\footnote{For example, in the Bitcoin backbone protocol model from~\cite{garay2015bitcoin}, block validation
+    should happen within finite and a-priori known round duration.}
+    , otherwise blockchain could trivially get stuck.
 
     The natural workaround is to split the automaton state between
     transactions once it becomes too large. As an extreme case one can make a
@@ -305,14 +309,15 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     of transaction chaining, although the language we use contains neither cycles nor
     recursion. By doing this we let a program to be executed over a sequence of
     transactions and blocks. This approach allows us to run programs in potentially infinite time on top 
-    of the blockchain while there is a strict upper-bound for block validation time~
-    \footnote{For example, in the Bitcoin backbone protocol model from~\cite{garay2015bitcoin}, block validation 
-    should happen within finite and a-priori known round duration.}.
-    A single transaction in the blockchain approximately corresponds to a single cycle of a computing 
-    machine. A possible trade-off here is between complexity of a single step and execution
-    time: one can either incorporate complex logic into a script, and expect
-    relatively fast execution, or leave the script logic short and simple, but
-    the execution will be about more transactions then.
+    of the blockchain while there is a strict upper-bound for block validation time. % перенес ссылку на GKL в первое место, где мы про это говорим
+    A single transaction in the blockchain approximately corresponds to a single
+    cycle of a computing machine.
+    This single cycle may be as complex, as language build-ins allows, however for
+    security reasons it should be able to estimate it's evaluation time in compile time.
+    %    A possible trade-off here is between complexity of a single step and execution
+%    time: one can either incorporate complex logic into a script, and expect
+%    relatively fast execution, or leave the script logic short and simple, but
+%    the execution will be about more transactions then.
 
     One can wonder how evolving data structures~(a blockchain and a
     corresponding UTXO set) along with programmable validation rules constitute
@@ -326,15 +331,15 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     presence.
 
     Our approach can be generally used for Turing completeness
-    proofs of various smart contract languages, for example, it might be possible to prove
+    proofs of various smart contract languages. For example, one may prove
     that smart contracts of Waves platform \cite{wavesSmarts} are actually
-    Turing complete, although the authors claim the opposite.
-    Rule 110 implementation is not required for practical cases, it just
-    guarantees that any algorithm can be potentially executed on top of the blockchain.
-
-    As one can see, self-reproducing coins allow on-chain execution of the algorithms with arbitrary complexity.
-    However, their efficient usage may require techniques significantly different from the conventional ones,
-    for example development environment for such multi-transactional scripts.
+    Turing complete, although the authors claimed the opposite.
+    Since Rule 110 implementation is not required for practical cases, it
+    guarantees that any algorithm can be potentially implemented.
+    Although in theory we have this guarantee, the efficient usage of
+    self-reproducing coins in practice may require a new development
+    environment, including high-level smart contract language for
+    such multi-transactional computations.
 
     %Unbounded loops power in terms of variety of algorithms that may be implemented
     %inside one transaction can not be fully utilized in blockchain systems because of 
