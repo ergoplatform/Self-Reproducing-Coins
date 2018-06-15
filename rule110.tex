@@ -378,7 +378,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     $5^{out[0].x}\,\textrm{mod}\, 23 = 13$. This script structure is admissible,
     but it is hard to say that it describes an actual program of discrete
     logarithm calculation. In our particular case the solution is simple. If the
-    guarding script is of the form $(out[0].x=f(in))\wedge something$ with $f$
+    guarding script is of the form $(out[0].x=f(in))\wedge(something)$ with $f$
     being some function, then in order to satisfy the condition one can replace
     the equality check with a variable assignment. Hence if we require the script
     to be conjunction of equality checks containing the fields of the outputs
@@ -391,10 +391,21 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     possible inputs with field $x$ being the key. Therefore, if the guarding
     script can be converted to the form
     \begin{eqnarray}
-        (\wedge_i\wedge_j(out[i].x_j=f_{ij}(in)))\wedge \\ 
-        (\wedge_i in[1].x_i = g_{1i}(in[0]))\wedge(\wedge_i in[2].x_i =
-        g_{2i}(in[0],in[2]))\wedge\dots
+        \nonumber
+        &\left(\bigwedge_i\bigwedge_j(out[i].x_j=f_{ij}(in))\right)\wedge \\ 
+        &\left(\bigwedge_i in[1].x_i  = g_{1i}(in[0])\right)\wedge
+        \left(\bigwedge_i in[2].x_i =
+        g_{2i}(in[0],in[2])\right)\wedge\dots,
         \label{eq:convertable}
     \end{eqnarray}
+    it can be efficiently converted to the sequence of actions. Namely, if
+    $in[0]$ is supposed to be spent, the lookup can yield $in[1]$, satisfying
+    the second term in Eq.~\ref{eq:convertable}, afterwards, the lookup can give
+    $in[2]$, and so on. After all the inputs are collected, one can create the
+    outputs by assignment of the corresponding fields. Collisions can be avoided
+    by using one field as a unique $id$, and if all the input scripts are
+    well-formed (that is, the contradictictions between inputs are absent),
+    validation test passes. The absence of contradictions between inputs can be
+    forced during the script creation time (that is, only once).
 
 \end{document}
