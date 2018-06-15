@@ -411,14 +411,39 @@ Research Institute\\\email{v.kharin@protonmail.com}}
         g_{2i}(in[0],in[1])\right)\wedge\dots,
         \label{eq:convertable}
     \end{eqnarray}
-    it can be efficiently converted to the sequence of actions. Namely, if
-    $in[0]$ is supposed to be spent, the lookup can yield $in[1]$, satisfying
-    the second term in Eq.~\ref{eq:convertable}, afterwards, the lookup can give
-    $in[2]$, and so on. After all the inputs are collected, one can create the
-    outputs by assignment of the corresponding fields. Collisions can be avoided
-    by using one field as a unique $id$, and if all the input scripts are
-    well-formed (that is, the contradictictions between inputs are absent),
-    validation test passes. The absence of contradictions between inputs can be
-    forced during the script creation time (that is, only once).
+    it can be efficiently converted to the transaction generation algorithm:
+
+    \begin{algorithm}[H]
+        \caption{Transaction creation algorithm}
+        \label{alg:tx}
+        \begin{algorithmic}[1]
+            \For{$in[0]~from~UTXO$}
+                \Let{i}{0}
+                \While{$scripts~of~in[0]...in[i]~have~rule~g~for~in[i+1]$}
+                    \Let{in[i+1]}{g(in[0]...in[i])}
+                    \Let{i}{i+1}
+                \EndWhile
+                \Let{j}{0}
+                \While{$scripts~of~in[0]...in[i]~have~rule~f~for~out[j]$}
+                    \Let{out[j]}{f(in[0]...in[i])}
+                    \Let{j}{j+1}
+                \EndWhile
+                \If{tx(in,out).isValid}
+                    \Return tx
+                \EndIf
+            \EndFor
+        \end{algorithmic}
+    \end{algorithm}
+
+
+    %    . Namely, if
+%    $in[0]$ is supposed to be spent, the lookup can yield $in[1]$, satisfying
+%    the second term in Eq.~\ref{eq:convertable}, afterwards, the lookup can give
+%    $in[2]$, and so on. After all the inputs are collected, one can create the
+%    outputs by assignment of the corresponding fields. Collisions can be avoided
+%    by using one field as a unique $id$, and if all the input scripts are
+%    well-formed (that is, the contradictictions between inputs are absent),
+%    validation test passes. The absence of contradictions between inputs can be
+%    forced during the script creation time (that is, only once).
 
 \end{document}
