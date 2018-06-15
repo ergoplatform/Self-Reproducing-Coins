@@ -399,7 +399,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     to be conjunction of equality checks containing the fields of the outputs
     solely on the left hand sides, and functions of the inputs on the right hand
     sides, then it actually defines the program (assuming the inputs fixed). It
-    is fully present in the Alg.~2. Another problem is collecting the right set
+    is fully present in the Alg.~\ref{alg:isRule110}. Another problem is collecting the right set
     of inputs for the transaction. Suppose one wants to spend $in[0]$. If the
     condition for $in[1]$ is conjunction of the expressions of type
     $in[1].x=f(in[0])$, then finding the suitable $in[1]$ is the lookup over the
@@ -421,6 +421,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
         \label{alg:tx}
         \begin{algorithmic}[1]
             \For{$in[0]~from~UTXO$}
+            %\Let{in[0]}{from UTXO}
                 \Let{i}{0}
                 \While{$scripts~of~in[0]...in[i]~have~rule~g()~for~in[i+1]$}
                     \Let{in[i+1]}{g(in[0]...in[i])}
@@ -437,21 +438,12 @@ Research Institute\\\email{v.kharin@protonmail.com}}
             \EndFor
         \end{algorithmic}
     \end{algorithm}
-
-    Note, that although not all the scripts can be can be represented in the form \ref{eq:scr}
-    and transaction generation algorithm do not exists, subset of scripts that are written
-    in such a way is enough for Turing-completeness, e.g. algorithms \ref{alg:isRule110}
-    and \ref{alg:txBit} for Rule 110 implementation are written in such a form.
-
-
-    %    . Namely, if
-%    $in[0]$ is supposed to be spent, the lookup can yield $in[1]$, satisfying
-%    the second term in Eq.~\ref{eq:convertable}, afterwards, the lookup can give
-%    $in[2]$, and so on. After all the inputs are collected, one can create the
-%    outputs by assignment of the corresponding fields. Collisions can be avoided
-%    by using one field as a unique $id$, and if all the input scripts are
-%    well-formed (that is, the contradictictions between inputs are absent),
-%    validation test passes. The absence of contradictions between inputs can be
-%    forced during the script creation time (that is, only once).
+    Here the last if-statement is the consistency check. Note that both
+    Alg.~\ref{alg:isRule110} and~\ref{alg:txBit} can be represented as the
+    desired form~(\ref{eq:convertable}) with the length checks.
+%    Note, that although not all the scripts can be can be represented in the form \ref{eq:scr}
+%    and transaction generation algorithm do not exists, subset of scripts that are written
+%    in such a way is enough for Turing-completeness, e.g. algorithms \ref{alg:isRule110}
+%    and \ref{alg:txBit} for Rule 110 implementation are written in such a form.
 
 \end{document}
