@@ -367,7 +367,34 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     \bibliography{sources}
     
 
-%    \section{Appendix~1}
-%    \label{appendix1}
+    \section{Appendix~1}
+    \label{appendix1}
+    This section addresses the question of conversion of the guarding script to
+    the procedure being executed by the client or miner. Note that the guarding
+    script itself does not explicitly prescribe the course of computational
+    actions needed to produce a valid transaction. It rather describes the
+    algorithm of telling whether the result of actions is correct or not. As an
+    example, one could set a guarding script in the form
+    $5^{out[0].x}\,\textrm{mod}\, 23 = 13$. This script structure is admissible,
+    but it is hard to say that it describes an actual program of discrete
+    logarithm calculation. In our particular case the solution is simple. If the
+    guarding script is of the form $(out[0].x=f(in))\wedge something$ with $f$
+    being some function, then in order to satisfy the condition one can replace
+    the equality check with a variable assignment. Hence if we require the script
+    to be conjunction of equality checks containing the fields of the outputs
+    solely on the left hand sides, and functions of the inputs on the right hand
+    sides, then it actually defines the program (assuming the inputs fixed). It
+    is fully present in the Alg.~2. Another problem is collecting the right set
+    of inputs for the transaction. Suppose one wants to spend $in[0]$. If the
+    condition for $in[1]$ is conjunction of the expressions of type
+    $in[1].x=f(in[0])$, then finding the suitable $in[1]$ is the lookup over the
+    possible inputs with field $x$ being the key. Therefore, if the guarding
+    script can be converted to the form
+    \begin{eqnarray}
+        (\wedge_i\wedge_j(out[i].x_j=f_{ij}(in)))\wedge \\ 
+        (\wedge_i in[1].x_i = g_{1i}(in[0]))\wedge(\wedge_i in[2].x_i =
+        g_{2i}(in[0],in[2]))\wedge\dots
+        \label{eq:convertable}
+    \end{eqnarray}
 
 \end{document}
