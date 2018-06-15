@@ -244,8 +244,8 @@ Research Institute\\\email{v.kharin@protonmail.com}}
             \State \(\triangleright\) mid flag is only set for the middle input
             \Let{inMidCorrect}{in[1].mid $\wedge$ $\neg$(in[0].mid $\vee$ in[2].mid)}
             \State \(\triangleright\) input positions are correct; n is the index of leftmost column
-            \Let{inYCorrect}{(in[0].n = in[1].n) $\wedge$ (in[0].n = in[2].n)}
-            \Let{inXCorrect}{(in[1].x = in[0].x$+1$) $\wedge$ (in[1].x = in[2].x$-1$)}
+            \Let{inYCorrect}{(in[1].n = in[0].n) $\wedge$ (in[2].n = in[0].n)}
+            \Let{inXCorrect}{(in[1].x = in[0].x$+1$) $\wedge$ (in[2].x = in[1].x$+1$)}
             \State \(\triangleright\) bits satisfy Rule 110
             \Let{inValCorrect}{out[0].val=\Call{calcBit}{in[0].val, in[1].val, in[2].val}}
             \State \(\triangleright\) output position matches the input one
@@ -404,8 +404,9 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     condition for $in[1]$ is conjunction of the expressions of type
     $in[1].x=f(in[0])$, then finding the suitable $in[1]$ is the lookup over the
     possible inputs with field $x$ being the key. Therefore, if the guarding
-    script can be converted to the form
+    script can be represented in the form
     \begin{eqnarray}
+        \label{eq:scr}
         \nonumber
         &\left(\bigwedge_i\bigwedge_j(out[i].x_j=f_{ij}(in))\right)\wedge \\ 
         &\left(\bigwedge_i in[1].x_i  = g_{1i}(in[0])\right)\wedge
@@ -421,12 +422,12 @@ Research Institute\\\email{v.kharin@protonmail.com}}
         \begin{algorithmic}[1]
             \For{$in[0]~from~UTXO$}
                 \Let{i}{0}
-                \While{$scripts~of~in[0]...in[i]~have~rule~g~for~in[i+1]$}
+                \While{$scripts~of~in[0]...in[i]~have~rule~g()~for~in[i+1]$}
                     \Let{in[i+1]}{g(in[0]...in[i])}
                     \Let{i}{i+1}
                 \EndWhile
                 \Let{j}{0}
-                \While{$scripts~of~in[0]...in[i]~have~rule~f~for~out[j]$}
+                \While{$scripts~of~in[0]...in[i]~have~rule~f()~for~out[j]$}
                     \Let{out[j]}{f(in[0]...in[i])}
                     \Let{j}{j+1}
                 \EndWhile
@@ -436,6 +437,11 @@ Research Institute\\\email{v.kharin@protonmail.com}}
             \EndFor
         \end{algorithmic}
     \end{algorithm}
+
+    Note, that although not all the scripts can be can be represented in the form \ref{eq:scr}
+    and transaction generation algorithm do not exists, subset of scripts that are written
+    in such a way is enough for Turing-completeness, e.g. algorithms \ref{alg:isRule110}
+    and \ref{alg:txBit} for Rule 110 implementation are written in such a form.
 
 
     %    . Namely, if
