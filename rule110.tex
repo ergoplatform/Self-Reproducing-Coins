@@ -92,7 +92,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 
     The utter simplicity of Rule 110 makes it an appealing basis for proving Turing completeness. 
     In the present work we construct Rule 110 automaton algorithm for UTXO blockchain
-    and implement it in $\Sigma$-State smart-contract language\cite{chepurnoy2017sigma}.
+    and implement it in $\Sigma$-State smart contract language\cite{chepurnoy2017sigma}.
     We require neither loops, nor jump
     operator, nor recursive calls inside a transaction. Instead, we treat the
     computation as if it is occurring between the transactions (or maybe
@@ -110,7 +110,9 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     the method for the real-world blockchain applications and sketches the
     discussion on the nature of computation in the framework of blockchain
     scripting and validation rules.
-
+    In \nameref{appendix1} we describe the structure of general purpose guarding script
+    which can be transformed into actual algorithm, and the transformation procedure.
+    
     \section{Rule 110 implementation}
     \label{section2}
 
@@ -198,8 +200,10 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     required for Turing completeness, can be modeled by chaining potentially infinite
     number of transactions in the blockchain. However, there is a pitfall left.
     The size of the data stored in output must have an upper-bound, and validation
-    time for a transaction must be bounded as well, otherwise blockchain could
-    trivially get stuck.
+    time for a transaction must be bounded as well
+    ~\footnote{For example, in the Bitcoin backbone protocol model from~\cite{garay2015bitcoin}, block validation
+    should happen within finite and a-priori known round duration.}
+    , otherwise blockchain could trivially get stuck.
 
     The natural workaround is to split the automaton state between
     transactions once it becomes too large. As an extreme case one can make a
@@ -207,7 +211,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     inefficient, this implementation keeps the logic simple and complies with the
     requirements of the blockchain and of potentially infinite evolution in
     space and time. The pseudocode of the corresponding script is
-    provided in the Algorithm~\ref{alg:txBit} and it's implementation in Ergo smart
+    provided in the Algorithm~\ref{alg:txBit} and its implementation in $\Sigma$-State
     contract language is provided at \cite{ergoScript2}. Fig.~\ref{fig:bit_txs}
     schematically shows the sequence of transactions (on the left), that corresponds
     to some area evaluation (on the right) of the automaton run.
@@ -240,8 +244,8 @@ Research Institute\\\email{v.kharin@protonmail.com}}
             \State \(\triangleright\) mid flag is only set for the middle input
             \Let{inMidCorrect}{in[1].mid $\wedge$ $\neg$(in[0].mid $\vee$ in[2].mid)}
             \State \(\triangleright\) input positions are correct; n is the index of leftmost column
-            \Let{inYCorrect}{(in[0].n = in[1].n) $\wedge$ (in[0].n = in[2].n)}
-            \Let{inXCorrect}{(in[1].x = in[0].x$+1$) $\wedge$ (in[1].x = in[2].x$-1$)}
+            \Let{inYCorrect}{(in[1].n = in[0].n) $\wedge$ (in[2].n = in[0].n)}
+            \Let{inXCorrect}{(in[1].x = in[0].x$+1$) $\wedge$ (in[2].x = in[1].x$+1$)}
             \State \(\triangleright\) bits satisfy Rule 110
             \Let{inValCorrect}{out[0].val=\Call{calcBit}{in[0].val, in[1].val, in[2].val}}
             \State \(\triangleright\) output position matches the input one
@@ -305,36 +309,54 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     of transaction chaining, although the language we use contains neither cycles nor
     recursion. By doing this we let a program to be executed over a sequence of
     transactions and blocks. This approach allows us to run programs in potentially infinite time on top 
-    of the blockchain while there is a strict upper-bound for block validation time~
-    \footnote{For example, in the Bitcoin backbone protocol model from~\cite{garay2015bitcoin}, block validation 
-    should happen within finite and a-priori known round duration.}.
-    A single transaction in the blockchain approximately corresponds to a single cycle of a computing 
-    machine. A possible trade-off here is between complexity of a single step and execution
-    time: one can either incorporate complex logic into a script, and expect
-    relatively fast execution, or leave the script logic short and simple, but
-    the execution will be about more transactions then.
+    of the blockchain while there is a strict upper-bound for block validation time. % перенес ссылку на GKL в первое место, где мы про это говорим
+    A single transaction in the blockchain approximately corresponds to a single
+    cycle of a computing machine.
+    The cycle may be as complex, as language built-ins allow, however for
+    security reasons it must be possible to estimate its evaluation time during
+    compilation.
+    %    A possible trade-off here is between complexity of a single step and execution
+%    time: one can either incorporate complex logic into a script, and expect
+%    relatively fast execution, or leave the script logic short and simple, but
+%    the execution will be about more transactions then.
 
     One can wonder how evolving data structures~(a blockchain and a
     corresponding UTXO set) along with programmable validation rules constitute
-    a Turing machine. Obviously, we do need to include honest miners as a
-    component of the machine as well, their efforts are making the input tape of
-    the machine.  The same is true for Ethereum and other blockchains with smart
-    contracts: the blockchain as a data structure does not perform any active
-    computations, it is stores the result, if the computations are valid
-    according to some rules. Chain quality property from~\cite{garay2015bitcoin}
-    should hold for a blockchain protocol in order to guarantee an input
-    presence.
+    a Turing machine. Obviously, we do need to include clients, forming tranasctions,
+    and majority of miners, including transactions into blocks, as a
+    component of the machine as well --- their efforts are making the input tape of
+    the machine. The same is true for Ethereum and other blockchains with smart
+    contracts: the blockchain as a data structure does not perform any
+    computations --- they should be initialized by a client.
+    %The question is how to convert a validation script to a strict
+    %sequence of actions client should perform to form a correct transaction.
+    %For the more detailed discussion on the subject we address reader
+    %to \nameref{appendix1}.
 
-    Our approach can be generally used for Turing completeness
-    proofs of various smart contract languages, for example, it might be possible to prove
+    %    , it is stores the result, if the computations are valid
+    %    according to some rules. Chain quality property from~\cite{garay2015bitcoin}
+    %    should hold for a blockchain protocol in order to guarantee an input
+    %    presene.
+
+    %    One can argue that a set of validation rules is not exactly a programming language,
+    %    since it does not prescript the sequence of actions, but rather the way to check whether
+    %    the result is correct. Here we stay on the
+    %    practical side: in our case the validation description is detailed enough to
+    %    convert it to the strict sequence of actions, hence it actually defines an
+    %    algorithm. For the more detailed discussion on the subject we address reader
+    %    to \nameref{appendix1}.
+
+    Our approach can be used for Turing completeness
+    proofs of various smart contract languages in general. For example, it might be
+    possible to prove
     that smart contracts of Waves platform \cite{wavesSmarts} are actually
-    Turing complete, although the authors claim the opposite.
+    Turing complete, although the authors claimed the opposite.
     Rule 110 implementation is not required for practical cases, it just
-    guarantees that any algorithm can be potentially executed on top of the blockchain.
-
-    As one can see, self-reproducing coins allow on-chain execution of the algorithms with arbitrary complexity.
-    However, their efficient usage may require techniques significantly different from the conventional ones,
-    for example development environment for such multi-transactional scripts.
+    guarantees that any algorithm can be potentially implemented.
+    Despite existence of this guarantee, efficient usage of
+    self-reproducing coins in practice may require new machinery including development
+    environments and high-level smart contract languages for
+    such multi-transactional computations.
 
     %Unbounded loops power in terms of variety of algorithms that may be implemented
     %inside one transaction can not be fully utilized in blockchain systems because of 
@@ -356,18 +378,14 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 %    miners in the blockchain network; thus the oracle is providing whether valid . We skip halting conditions processing for 
 %    simplicity. We note that an oracle machine can simulate any Turing machine~(a-machine).
 
-%    One can argue that a set of validation rules is not exactly a programming language, 
-%    since it does not prescript the sequence of actions, but rather the way to check whether 
-%    the result is correct. Here we stay on the
-%    practical side: in our case the validation description is detailed enough to
-%    convert it to the strict sequence of actions, hence it actually defines an
-%    algorithm. For the more detailed discussion on the subject we address reader
-%    to \nameref{appendix1}.
+    \section*{Acknowledgments}
+
+    Authors thank Manuel Chakravarty, Oksana Klimenko and Georgy Meshkov for
+    the discussions and helpful comments on early drafts of this paper.
 
     \bibliography{sources}
-    
 
-    \section{Appendix~1}
+    \section*{Appendix}
     \label{appendix1}
     This section addresses the question of conversion of the guarding script to
     the procedure being executed by the client or miner. Note that the guarding
@@ -384,28 +402,51 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     to be conjunction of equality checks containing the fields of the outputs
     solely on the left hand sides, and functions of the inputs on the right hand
     sides, then it actually defines the program (assuming the inputs fixed). It
-    is fully present in the Alg.~2. Another problem is collecting the right set
+    is fully present in the Alg.~\ref{alg:isRule110}. Another problem is collecting the right set
     of inputs for the transaction. Suppose one wants to spend $in[0]$. If the
     condition for $in[1]$ is conjunction of the expressions of type
     $in[1].x=f(in[0])$, then finding the suitable $in[1]$ is the lookup over the
     possible inputs with field $x$ being the key. Therefore, if the guarding
-    script can be converted to the form
+    script can be represented in the form
     \begin{eqnarray}
+        \label{eq:scr}
         \nonumber
         &\left(\bigwedge_i\bigwedge_j(out[i].x_j=f_{ij}(in))\right)\wedge \\ 
         &\left(\bigwedge_i in[1].x_i  = g_{1i}(in[0])\right)\wedge
         \left(\bigwedge_i in[2].x_i =
-        g_{2i}(in[0],in[2])\right)\wedge\dots,
+        g_{2i}(in[0],in[1])\right)\wedge\dots,
         \label{eq:convertable}
     \end{eqnarray}
-    it can be efficiently converted to the sequence of actions. Namely, if
-    $in[0]$ is supposed to be spent, the lookup can yield $in[1]$, satisfying
-    the second term in Eq.~\ref{eq:convertable}, afterwards, the lookup can give
-    $in[2]$, and so on. After all the inputs are collected, one can create the
-    outputs by assignment of the corresponding fields. Collisions can be avoided
-    by using one field as a unique $id$, and if all the input scripts are
-    well-formed (that is, the contradictictions between inputs are absent),
-    validation test passes. The absence of contradictions between inputs can be
-    forced during the script creation time (that is, only once).
+    it can be efficiently converted to the transaction generation algorithm:
+
+    \begin{algorithm}[H]
+        \caption{Transaction creation algorithm}
+        \label{alg:tx}
+        \begin{algorithmic}[1]
+            \For{$in[0]~\gets~UTXO$}
+            %\Let{in[0]}{from UTXO}
+                \Let{i}{0}
+                \While{$scripts~of~in[0]...in[i]~have~rule~g()~for~in[i+1]$}
+                    \Let{in[i+1]}{UTXO(g(in[0]...in[i]))}
+                    \Let{i}{i+1}
+                \EndWhile
+                \Let{j}{0}
+                \While{$scripts~of~in[0]...in[i]~have~rule~f()~for~out[j]$}
+                    \Let{out[j]}{f(in[0]...in[i])}
+                    \Let{j}{j+1}
+                \EndWhile
+                \If{tx(in,out).isValid}
+                    \Return tx
+                \EndIf
+            \EndFor
+        \end{algorithmic}
+    \end{algorithm}
+    Here the last if-statement is the consistency check. Note that both
+    Alg.~\ref{alg:isRule110} and~\ref{alg:txBit} can be represented as the
+    desired form~(\ref{eq:convertable}) with the length checks.
+%    Note, that although not all the scripts can be can be represented in the form \ref{eq:scr}
+%    and transaction generation algorithm do not exists, subset of scripts that are written
+%    in such a way is enough for Turing-completeness, e.g. algorithms \ref{alg:isRule110}
+%    and \ref{alg:txBit} for Rule 110 implementation are written in such a form.
 
 \end{document}
