@@ -92,7 +92,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 
     The utter simplicity of Rule 110 makes it an appealing basis for proving Turing completeness. 
     In the present work we construct Rule 110 automaton algorithm for UTXO blockchain
-    and implement it in $\Sigma$-State smart-contract language\cite{chepurnoy2017sigma}.
+    and implement it in $\Sigma$-State smart contract language\cite{chepurnoy2017sigma}.
     We require neither loops, nor jump
     operator, nor recursive calls inside a transaction. Instead, we treat the
     computation as if it is occurring between the transactions (or maybe
@@ -160,7 +160,8 @@ Research Institute\\\email{v.kharin@protonmail.com}}
             \Function{validate}{in, out}
             \Function{isRule110}{inLayer, outLayer}
             \Function{procCell}{$i$}
-            \Let{$\ell$}{inLayer[$i-1$ mod inLayer.size]}
+            \Let{$leftIndex$}{if($i=0$) inLayer.size - 1 else $i-1$}
+            \Let{$\ell$}{inLayer[$leftIndex$]}
             \Let{$c$}{inLayer[$i$]}
             \Let{$r$}{inLayer[$i+1$ mod inLayer.size]}
             \State
@@ -211,7 +212,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     inefficient, this implementation keeps the logic simple and complies with the
     requirements of the blockchain and of potentially infinite evolution in
     space and time. The pseudocode of the corresponding script is
-    provided in the Algorithm~\ref{alg:txBit} and it's implementation in Ergo smart
+    provided in the Algorithm~\ref{alg:txBit} and it's implementation in $\Sigma$-State
     contract language is provided at \cite{ergoScript2}. Fig.~\ref{fig:bit_txs}
     schematically shows the sequence of transactions (on the left), that corresponds
     to some area evaluation (on the right) of the automaton run.
