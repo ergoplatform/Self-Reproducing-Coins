@@ -160,7 +160,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
             \Function{validate}{in, out}
             \Function{isRule110}{inLayer, outLayer}
             \Function{procCell}{$i$}
-            \Let{$\ell$}{inLayer[inLayer[$i-1$ mod inLayer.size]]}
+            \Let{$\ell$}{inLayer[$i-1$ mod inLayer.size]}
             \Let{$c$}{inLayer[$i$]}
             \Let{$r$}{inLayer[$i+1$ mod inLayer.size]}
             \State
@@ -211,7 +211,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     inefficient, this implementation keeps the logic simple and complies with the
     requirements of the blockchain and of potentially infinite evolution in
     space and time. The pseudocode of the corresponding script is
-    provided in the Algorithm~\ref{alg:txBit} and it's implementation in $\Sigma$-State
+    provided in the Algorithm~\ref{alg:txBit} and its implementation in $\Sigma$-State
     contract language is provided at \cite{ergoScript2}. Fig.~\ref{fig:bit_txs}
     schematically shows the sequence of transactions (on the left), that corresponds
     to some area evaluation (on the right) of the automaton run.
@@ -380,12 +380,12 @@ Research Institute\\\email{v.kharin@protonmail.com}}
 
     \section*{Acknowledgments}
 
-    We would like to thank Manuel Chakravarty, Oksana Klemenko and Georgy Meshkov for comments on early drafts of this paper.
+    Authors thank Manuel Chakravarty, Oksana Klimenko and Georgy Meshkov for
+    the discussions and helpful comments on early drafts of this paper.
 
     \bibliography{sources}
-    
 
-    \section*{Appendix~1}
+    \section*{Appendix}
     \label{appendix1}
     This section addresses the question of conversion of the guarding script to
     the procedure being executed by the client or miner. Note that the guarding
