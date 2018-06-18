@@ -160,8 +160,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
             \Function{validate}{in, out}
             \Function{isRule110}{inLayer, outLayer}
             \Function{procCell}{$i$}
-            \Let{$leftIndex$}{if($i=0$) inLayer.size - 1 else $i-1$}
-            \Let{$\ell$}{inLayer[$leftIndex$]}
+            \Let{$\ell$}{inLayer[inLayer[$i-1$ mod inLayer.size]]}
             \Let{$c$}{inLayer[$i$]}
             \Let{$r$}{inLayer[$i+1$ mod inLayer.size]}
             \State
