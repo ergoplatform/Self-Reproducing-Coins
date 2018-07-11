@@ -14,5 +14,4 @@ pdflatex rule110
 rm rule110.aux
 rm rule110.out
 rm rule110.log
-rm rule110.bbl
 rm rule110.blg
