@@ -26,7 +26,7 @@
 
 \institute{Ergo Platform \\\email{catena@protonmail.com} \and
 IOHK Research \\\email{alex.chepurnoy@iohk.io} \and
-Research Institute\\\email{v.kharin@protonmail.com}}
+Research Institute, Moscow R\&D Lab\\\email{v.kharin@protonmail.com}}
 
     \date{\today}
     \maketitle
@@ -35,7 +35,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
         Turing-completeness of smart contract languages in blockchain
         systems is often associated with a variety of language features
         (such as loops). 
-        In opposite, we show that Turing-completeness of a blockchain system can
+        On the contrary, we show that Turing-completeness of a blockchain system can
         be achieved through unwinding the recursive calls between
         multiple transactions and blocks instead of using a single one. We prove 
         it by constructing a simple universal Turing machine using
@@ -75,13 +75,13 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     the Turing machine which can simulate any other Turing machine; its
     existence is one of the main results of the Turing
     theory~\cite{turing1937computable}. The study of Turing machines is strongly
-    motivated by the Church---Turing thesis, which states that Turing machines
-    are capable of universal computation. The thesis is often viewed as a
+    motivated by the Church---Turing thesis, which states any computation in
+    the intuitive sense can be performed on a Turing machine. The thesis is often viewed as a
     definition of computation and computability~\cite{turing1939systems}. The
     set of known computation devices and models was rapidly growing during the
     twentieth century, and the methods of their analysis were improved as well.
     The usual way of proving the Turing-completeness of a system,
-    a device or a language is about using it to emulate a system that is already
+    a device or a language is by using it to emulate a system that is already
     proven to be Turing complete. A system which we are using in this work is 
     one-dimensional cellular automaton Rule 110. It was conjectured to
     be Turing complete by S.~Wolfram~\cite{wolfram1986theory}. The conjecture
@@ -117,7 +117,8 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     is transforming one-dimensional string of zeros and ones by applying evolution rules. One
     step of evolution for one bit is defined by its value $c$ together with the
     values of the two neighboring bits --- the left one $\ell$ and the right one $r$, along with a 
-    transition rule defined in Algorithm~\ref{alg:calc_bit}
+    transition rule defined in Algorithm~\ref{alg:calc_bit} (``$\oplus$'' stands
+    for XOR operation).
 
     \begin{algorithm}[H]
         \caption{Transition function of the Rule 110 automaton}
@@ -286,7 +287,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     boundary cells, either one or two inputs are emulated to have zero bit values
     (lines 20--32).  The overall validation script checks the correctness of the
     positions of inputs (lines 12 and 13) and outputs (line 17), correspondence of
-    of the bit values (line 15), the correctness of the $mid$  flag assignment for
+    the bit values (line 15), the correctness of the $mid$  flag assignment for
     inputs (line 10) and the fact that all outputs are identical except the $mid$
     flag, which is set only once (lines 2--7).
 
@@ -310,10 +311,6 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     step of a computing machine.
     The step may be as complex as language built-ins allow; however, for
     security reasons it should be possible to estimate its running time before the actual evaluation.
-    %    A possible trade-off here is between complexity of a single step and execution
-%    time: one can either incorporate complex logic into a script, and expect
-%    relatively fast execution, or leave the script logic short and simple, but
-%    the execution will be about more transactions then.
 
     One can wonder how evolving data structures~(a blockchain and a
     corresponding UTXO set) along with programmable validation rules constitute
@@ -323,23 +320,6 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     the machine. The same is true for Ethereum and other blockchains with smart
     contracts: the blockchain as a data structure does not endorse any
     computations --- they should be initialized by a client.
-    %The question is how to convert a validation script to a strict
-    %sequence of actions client should perform to form a correct transaction.
-    %For the more detailed discussion on the subject we address reader
-    %to \nameref{appendix1}.
-
-    %    , it is stores the result, if the computations are valid
-    %    according to some rules. Chain quality property from~\cite{garay2015bitcoin}
-    %    should hold for a blockchain protocol in order to guarantee an input
-    %    presene.
-
-    %    One can argue that a set of validation rules is not exactly a programming language,
-    %    since it does not prescript the sequence of actions, but rather the way to check whether
-    %    the result is correct. Here we stay on the
-    %    practical side: in our case the validation description is detailed enough to
-    %    convert it to the strict sequence of actions, hence it actually defines an
-    %    algorithm. For the more detailed discussion on the subject we address reader
-    %    to \nameref{appendix1}.
 
     Our approach can be used for Turing-completeness
     proofs of various smart contract languages in general. For example, it might be
@@ -352,34 +332,10 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     self-reproducing coins in practice may require new machinery, including development
     environments and high-level smart contract languages for the multiple-transactions computations.
 
-    %Unbounded loops power in terms of variety of algorithms that may be implemented
-    %inside one transaction can not be fully utilized in blockchain systems because of 
-	%the strict upper bound on transaction validation time.
-
-    %Surprisingly, one can work around this limitation by avoiding unbounded loops.
-	%This way he can estimate script complexity in compile-time
-    %and divide algorithm into multiple transactions if needed. Thus, the hard
-    %computation limit per block may be surpassed by chaining multiple transactions
-    %between different block.
-
-
-
-
-
-%    To make an oracle 
-%    machine~(o-machine) out of the blockchain, we add an oracle tape~(in addition to the working tape, 
-%    which is storing the machine state). The machine is calling an oracle, which is simulating honest 
-%    miners in the blockchain network; thus the oracle is providing whether valid . We skip halting conditions processing for 
-%    simplicity. We note that an oracle machine can simulate any Turing machine~(a-machine).
-
-
-
     \section*{Acknowledgments}
 
     Authors thank Manuel Chakravarty, Oksana Klimenko, and Georgy Meshkov for
     the discussions and helpful comments on early drafts of this paper.
-
-
 
     \bibliography{sources}
 
@@ -422,8 +378,7 @@ Research Institute\\\email{v.kharin@protonmail.com}}
         \caption{Transaction creation algorithm}
         \label{alg:tx}
         \begin{algorithmic}[1]
-            \For{$in[0]~\gets~UTXO$}
-            %\Let{in[0]}{from UTXO}
+            \For{in[0]~$\gets$~UTXO}
                 \Let{i}{0}
                 \While{$scripts~of~in[0]...in[i]~have~rule~g()~for~in[i+1]$}
                     \Let{in[i+1]}{UTXO(g(in[0]...in[i]))}
@@ -443,9 +398,5 @@ Research Institute\\\email{v.kharin@protonmail.com}}
     Here the last if-statement is the consistency check. Note that both
     Alg.~\ref{alg:isRule110} and~\ref{alg:txBit} can be represented as the
     desired form~(\ref{eq:convertable}) with the length checks.
-%    Note, that although not all the scripts can be can be represented in the form \ref{eq:scr}
-%    and transaction generation algorithm do not exists, subset of scripts that are written
-%    in such a way is enough for Turing-completeness, e.g. algorithms \ref{alg:isRule110}
-%    and \ref{alg:txBit} for Rule 110 implementation are written in such a form.
 
 \end{document}
