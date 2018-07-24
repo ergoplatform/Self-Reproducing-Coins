@@ -75,7 +75,7 @@ Research Institute, Moscow R\&D Lab\\\email{v.kharin@protonmail.com}}
     the Turing machine which can simulate any other Turing machine; its
     existence is one of the main results of the Turing
     theory~\cite{turing1937computable}. The study of Turing machines is strongly
-    motivated by the Church---Turing thesis, which states any computation in
+    motivated by the Church---Turing thesis, which states that any computation in
     the intuitive sense can be performed on a Turing machine. The thesis is often viewed as a
     definition of computation and computability~\cite{turing1939systems}. The
     set of known computation devices and models was rapidly growing during the
@@ -90,7 +90,7 @@ Research Institute, Moscow R\&D Lab\\\email{v.kharin@protonmail.com}}
 
     The utter simplicity of Rule 110 makes it an appealing basis for proving Turing-completeness. 
     In the present work we construct Rule 110 automaton algorithm for UTXO blockchain
-    and implement it in $\Sigma$-State smart contract language\cite{chepurnoy2017sigma}.
+    and implement it in ErgoScript smart contract language\cite{chepurnoy2017sigma}.
     We require neither loops, nor jump
     operator, nor recursive calls inside a transaction. Instead, we treat the
     computation as if it is occurring between the transactions (or maybe
@@ -103,12 +103,12 @@ Research Institute, Moscow R\&D Lab\\\email{v.kharin@protonmail.com}}
     This paper is structured as follows: in Section~\ref{section2}, we first
     describe a naive implementation of Rule 110 using a simple Bitcoin-like
     scripting language. Then we discuss the pitfalls arising from compliance
-    with the blockchain properties, and show the way to overcome them. Section~\ref{section3} 
-    describes the implementation for the real-world blockchains, and also sketches the
+    with blockchain properties, and show a way to overcome them. Section~\ref{section3} 
+    describes an implementation for the real-world blockchains, and also sketches a 
     discussion on the nature of computation in the framework of blockchain
     scripting and validation rules.
-    In \nameref{appendix1} we describe the structure of a general-purpose guarding script for an output  
-    which can be transformed into an actual algorithm, along with the transformation procedure.
+    In \nameref{appendix1} we describe a structure of a general-purpose guarding script for an output  
+    which can be transformed into an actual algorithm along with a transformation procedure.
     
     \section{Rule 110 implementation}
     \label{section2}
@@ -131,7 +131,7 @@ Research Institute, Moscow R\&D Lab\\\email{v.kharin@protonmail.com}}
         \end{algorithmic}
     \end{algorithm}
 
-    For the automaton implementation in a blockchain we use Bitcoin-like
+    For automaton implementation in a blockchain we use Bitcoin-like
     transactions consisting of inputs and outputs. Every output consists of a
     guarding \script{} and a \payload{}, while an input is a reference to an
     output from a previous transaction.  We assume that the current state of the
@@ -197,7 +197,7 @@ Research Institute, Moscow R\&D Lab\\\email{v.kharin@protonmail.com}}
     Potentially infinite evolution of a cellular automaton, which is
     required for Turing-completeness, can be modeled by chaining potentially infinite
     number of transactions in the blockchain. However, there is a pitfall left.
-    The size of the data stored in output must have an upper-bound, and validation
+    Size of the data stored in output must have an upper-bound, and validation
     time for a transaction must be bounded as well, otherwise blockchain is losing its security properties~\footnote{For example, in the Bitcoin backbone protocol model from~\cite{garay2015bitcoin}, block validation
     should happen within finite and a-priori known round duration.}.
 
@@ -207,7 +207,7 @@ Research Institute, Moscow R\&D Lab\\\email{v.kharin@protonmail.com}}
     inefficient, this implementation keeps the logic simple and complies with the
     requirements of the blockchain and of potentially infinite evolution in
     space and time. The pseudocode of the corresponding script is
-    provided in the Algorithm~\ref{alg:txBit} and its implementation in $\Sigma$-State
+    provided in the Algorithm~\ref{alg:txBit} and its implementation in ErgoScript 
     contract language is provided at \cite{ergoScript2}. Fig.~\ref{fig:bit_txs}
     schematically shows the sequence of transactions (on the left), that corresponds
     to some area evaluation (on the right) of the automaton run.
@@ -339,7 +339,7 @@ Research Institute, Moscow R\&D Lab\\\email{v.kharin@protonmail.com}}
 
     \bibliography{sources}
 
-    \section*{Appendix}
+    \section*{Appendix 1}
     \label{appendix1}
 
     This section addresses a question of guarding script conversion into
